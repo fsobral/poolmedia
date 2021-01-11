@@ -1,7 +1,7 @@
 c  programa poolmedia.for. Basado en submultiplos.for
 c  Minimizar el costo considerando un intervalo de incerteza
 c  en la probabilidad.
-c  Actualizado en 5 enero 2021.
+c  Actualizado en 6 enero 2021.
 
       implicit none
 
@@ -135,7 +135,10 @@ c      write(*, *)' Cota para m2 = ', cota
 
       do 4 numero = m1min, m1max   
 
-
+c888888888888888888888888888888888888888888888888888888888888888888888888888888888
+c     Impresiones (*, *) a partir de aqui y hasta el lugar indicado tienen importancia
+c     interna y son irrelevantes para el usuario
+c888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
       write(*, *)
       write(*, *)
@@ -269,7 +272,6 @@ c  Encontrar el menor costo
       end do
 
       write(*, *)' Resultado para  m1 =', numero  
-      write(27, *) numero, cosmenor
 
       write(*, *)' Costo para este  m1:', cosmenor
 
@@ -290,16 +292,6 @@ c  Encontrar el menor costo
       end do
       write(*, *)
 
-      write(29, *)' Solucion para  m1 =', numero
-      do i = 1, jmenor
-      write(29, *) solucion(i)
-      end do
-      do i = 1, jmenor-1
-      write(29, *)' Cociente entre m(j) y m(j+1) = ', 
-     *  solucion(i)/solucion(i+1)
-      end do
-      write(29,*) 
-      write(29, *)
 
 
 
@@ -339,6 +331,9 @@ c   Este "4 continue" corresponde a "do 4 m1 = m1min, m1max"
 c   O sea, aqui termina el proceso de optimizacion, arrojando la solucion solopt. 
 
 
+
+
+
       write(*, *)
       write(*, *)' Solucion final: '
 
@@ -348,22 +343,16 @@ c   O sea, aqui termina el proceso de optimizacion, arrojando la solucion solopt
       write(*, *) solopt(i)
       end do
 
+
+c8888888888888888888888888888888888888888888888888888888888888888888888888888888888
+c    A partir de aqui las impresiones vuelven a tener importancia para el usuario
+c8888888888888888888888888888888888888888888888888888888888888888888888888888888888
+ 
+
+
       write(*, *)' Number of rows used:', filused,' over a maximum of '
      *,  mafil
 
-      write(29, *)
-      write(29, *)' Fallas por falta de memoria:',  memfail 
-      write(29, *)' Solucion final :' 
-      write(29, *)' Longitud de la estrategia:', jopt     
-  
-
-  
-      do i = 1, jopt
-      write(29, *) solopt(i)
-      end do
-      write(29, *)' Costo optimo:', cosopt
- 
- 
 
  
 
