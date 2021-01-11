@@ -18,8 +18,8 @@ c  en la probabilidad.
       integer meritos(100, 20), pobla, ncang
       double precision cosmeri(100), cant1, cant2, infe1, probanf
       double precision prind, cangru, totinfec, intes, sumtes 
-      integer necepul, nparpu, nsteps, ntime, overf, nsumt,kmax1
- 
+      integer necepul, nparpu, nsteps, ntime, overf, nsumt,kmax1,nbon
+      integer pseudo
       integer longmer(100)
 
       double precision pmin, pmax
@@ -28,11 +28,12 @@ c  en la probabilidad.
 
 
 
-      write(*, *)' pmin, pmax:'
+      write(*, *)
+     * ' Minimal and maximal probability of individual infection:'
       read(*, *)pmin, pmax
       if(pmin.gt.pmax) then
 
-      write(*, *)' pmin no puede ser mayor que pmax'
+      write(*, *)' Sorry: Minimal cannot be bigger than maximum. '
       stop
       endif
       if(pmin.eq.pmax) then
@@ -48,19 +49,20 @@ c  en la probabilidad.
       write(*, *)' of infection may be bigger than 0.3066387'
       write(*, *)' the  optimal solution is to test '
       write(*, *)' all the individuals immediately.'
+      write(*, *)' The average cost is equal to 1 and we stop here.'
       stop
       endif  
 
-      write(*, *)' Poblacion total:'
-      read(*, *) pobla
-
-      write(*, *)' Parallel pools available:'
-      read(*, *) parpul
- 
-      write(*, *)' Cuantas mejores estrategias deseas exponer?'
-      write(*, *)' (100 como maximo por favor)'
+      write(*, *)' How many best strategies do you want to see ?'
+      write(*, *)' (No more than 100 please)'
       read(*, *) mejores
-      if(mejores.gt.100) stop
+      if(mejores.gt.100) then
+      write(*, *)' Sorry, we dont admit more than 100. We stop here'
+      stop
+      endif                 
+
+ 
+
 
 c  Inicializar matriz de méritos
       do j = 1, 20 
@@ -80,7 +82,6 @@ c  Inicializar matriz de méritos
 5      write(*, *)
 
 
-      write(*, *)' pmin, pmax = ', pmin, pmax
 
 
 
@@ -88,13 +89,18 @@ c      cota = (dlog(3.d0)/3.d0)/dabs(dlog(q))
 
 c      write(*, *)' Cota para m2 = ', cota
 
+      nbon =   1.464d0/dabs(dlog(1.d0-pmin)) + 1.d0  
+ 
 
-      write(*, *)' Cota para m1 = ', 1.464d0/dabs(dlog(1.d0-pmin)) 
+      write(*, *)' Bound for m(1) = ', nbon 
 
-      write(*, *)' Conta para m2 = ', 0.366/dabs(dlog(1.d0-pmin))
-      
+      nbon =    0.366/dabs(dlog(1.d0-pmin)) + 1.d0  
+  
 
+      write(*, *)' Bound for m(2) = ', nbon
 
+     
+ 
 
 
 
@@ -103,14 +109,17 @@ c      write(*, *)' Cota para m2 = ', cota
 
       m1min = 2
 
-      write(*, *)' m1 maximo permitido:'
+      write(*, *)' Maximal allowed value for m(1) (first pool size):'
+      write(*, *)' Computer time depends on this number.'
+      write(*, *)' You can expect that time approx m1/1000 minutes'
+      write(*, *)' You can set m1 greater than "Bound for m1"'
+      write(*, *)' although it will be very likely unuseful'
+
       read(*, *) m1max
 
       write(*, *)' Maximum number of stages k+1:'
       read(*, *) kmax1
 
-c      write(*, *)'m1min,  m1max = '
-c      read(*, *) m1min, m1max
 
 
       do 4 numero = m1min, m1max   
@@ -315,7 +324,7 @@ c  Poner la ultima solucion obtenida en su orden de mérito
 
 4     continue
 c   Este "4 continue" corresponde a "do 4 m1 = m1min, m1max"
- 
+c   O sea, aqui termina el proceso de optimizacion, arrojando la solucion solopt. 
 
 
       write(*, *)
@@ -329,7 +338,7 @@ c   Este "4 continue" corresponde a "do 4 m1 = m1min, m1max"
 
       write(29, *)
       write(29, *)' Fallas por falta de memoria:',  memfail 
-      write(29, *)' Solucion final para  p = ', p
+      write(29, *)' Solucion final :' 
       write(29, *)' Longitud de la estrategia:', jopt     
   
 
@@ -341,32 +350,50 @@ c   Este "4 continue" corresponde a "do 4 m1 = m1min, m1max"
  
  
 
-
-c        write(*, *)' 1/m1 + 1 - q^m1 = ',
-c     *   1.d0/solopt (1) + 1.d0 - (1.d0-p)**solopt(1)
- 
  
 
 
       write(*, *)' Optimal cost :', cosopt
       write(*, *)' Failures by lack of memory:', memfail
+      write(*, *)' Solution:'
+      write(*, *)(solopt(i),i=1,jopt)
+      write(*, *)' Optimal cost:', cosopt
       
-c      write(*, *)' Limitante inferior: ', 1.d0/solopt(1)
-c
-c
-c
+
+      write(*, *)' If you want pseudo-simulations considering '
+      write(*, *)' parallel pools availability, type 1'
+      write(*, *)' otherwise, type 0'
+      read(*, *) pseudo
+
       write(*, *)'*************************************************'
+
+      if(pseudo.ne.0) then
+      write(*, *)' Total population:'
+      read(*, *) pobla
+
+      write(*, *)' Parallel pools available:'
+      read(*, *) parpul
+
+
+
+
+
       write(*, *)
       p = (pmin+pmax)/2.d0
 
       write(*, *)' Population :', pobla,' p = ', p
       nparpul = parpul
       write(*, *)' Parallel pools available:',nparpul  
+      endif
+
       write(*, *)' Maximum pool-size allowed (m1):', m1max          
       write(*, *)'*************************************************'
       write(*, *) ' Best ', mejores,' strategies :' 
-      write(*, *)' (For simulating stages we use p =', p,' .)' 
 
+      if(pseudo.ne.0) then
+      write(*, *)' (For simulating stages we use p =', p,' .)' 
+      endif
+      
       do i = 1, mejores
       write(*, *)'        ***************************************' 
       write(*, *)
@@ -374,6 +401,10 @@ c
       write(*, *)' The number of feasible strategies is smaller than ',
      *   mejores
       stop
+      endif
+
+      if(pseudo.ne.0) then
+      write(*, *)' Pseudo-simulation of '
       endif
 
       if(i.eq.1) write(*, *) ' 1-st best strategy'
@@ -396,7 +427,7 @@ c  prind es la probabilidad de que un individuo envuelto en los tests
 c  de determinado nivel j esté infectado
 c  En el nivel 1 es igual a p
 
-
+      if(pseudo.ne.0) then
       totinfec = p * pobla   
 
 c      write(*, *)' Total de infectados en la poblacion:', totinfec       
@@ -431,6 +462,7 @@ c  cangru es el numero de grupos en el nivel 1
       nsteps = (necepul - overf)/parpul + 1
       endif
       write(*, *)' Time units necessary to process this stage:', nsteps
+      if(nsteps.gt.1) then
       if(overf.ne.0) then
       if(overf.eq.1) then
       write(*, *)' including 1 time unit for an overflow equal to ', 
@@ -438,6 +470,7 @@ c  cangru es el numero de grupos en el nivel 1
       else
       write(*, *)' including 1 time unit for an overflow equal to ', 
      *  overf,' pools '       
+      endif
       endif
       endif
       ntime = ntime + nsteps
@@ -509,12 +542,14 @@ c      write(*, *)' en el nivel ', j+1,' esté infectado:', prind
       else
       nsteps = (necepul - overf)/parpul + 1
       write(*, *)' Time units necessary to process this stage:', nsteps
+      if(nsteps.gt.1) then
       if(overf.eq.1) then
       write(*, *)' including 1 time unit for an overflow equal to = ',
      *   overf, ' pool'
       else
       write(*, *)' including 1 time unit for an overflow equal to = ',
      *   overf, ' pools'        
+      endif
       endif
       endif
       ntime = ntime + nsteps
@@ -538,7 +573,8 @@ c     *,   step, ' Accumulated:', time
 
       write(*, *) 
 c*******************************************************************************
-
+      endif 
+c  This endif corresponds to if(pseudo.ne.0)
       end do
 
 
