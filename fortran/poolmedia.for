@@ -12,10 +12,10 @@ c  en la probabilidad.
       integer matriz(mafil, macol), submu(subdim), numesub, filas
       integer columnas, noceros, numefail
       integer prede(mafil, macol)
-      double precision costos(mafil, macol), cosopt, pobla, acum
+      double precision costos(mafil, macol), cosopt, acum
       double precision  p, q, cosmenor, cota, seed, probinf, parpul
       integer memfail, step, time, mejores, npobla, nparpul
-      integer meritos(100, 20)
+      integer meritos(100, 20), pobla, ncang
       double precision cosmeri(100), cant1, cant2, infe1, probanf
       double precision prind, cangru, totinfec, intes, sumtes 
       integer necepul, nparpu, nsteps, ntime, overf, nsumt,kmax1
@@ -357,10 +357,9 @@ c
 c
       write(*, *)'*************************************************'
       write(*, *)
-      npobla = pobla
       p = (pmin+pmax)/2.d0
 
-      write(*, *)' Population :', npobla,' p = ', p
+      write(*, *)' Population :', pobla,' p = ', p
       nparpul = parpul
       write(*, *)' Parallel pools available:',nparpul  
       write(*, *)' Maximum pool-size allowed (m1):', m1max          
@@ -403,7 +402,7 @@ c  En el nivel 1 es igual a p
 c      write(*, *)' Total de infectados en la poblacion:', totinfec       
 
       prind = p
-      cangru = pobla/meritos(i, 1)
+      cangru = dfloat(pobla)/dfloat(meritos(i, 1))
       
 c  cangru es el numero de grupos en el nivel 1
 
@@ -414,7 +413,14 @@ c  cangru es el numero de grupos en el nivel 1
 
       write(*, *)
       write(*, *)' Stage ', j,' Size of each pool:', meritos(i,j)
+      
+      ncang = cangru
+      if(cangru.gt.dfloat(ncang)) then
       necepul = cangru + 1.
+      else
+      necepul = cangru
+      endif
+
       write(*, *)' Number of Pools that are necessary for this stage:',
      *   necepul
       nparpu = parpul
@@ -441,15 +447,6 @@ c  cangru es el numero de grupos en el nivel 1
      
                           
 
-      
-c      write(*, *)' Number of tests at stage  ', j,' = ', 
-c     *   cangru
-
-c  compute the number of time steps for this stage considering parallelism
-c      step = cangru/parpul + 1.d0
-c      time = time + step
-c      write(*, *)' Time steps at stage ', j,' considering parallelism:'
-c     *,   step, ' Accumulated:', time
       
 
 
@@ -495,7 +492,14 @@ c      write(*, *)' en el nivel ', j+1,' esté infectado:', prind
       sumtes = sumtes + cangru
       write(*, *)
       write(*, *)' Stage ', longmer(i)+1 ,' Size of each pool: 1'
+
+      ncang = cangru
+      if(cangru.gt.dfloat(ncang)) then
       necepul = cangru + 1.
+      else
+      necepul = cangru
+      endif
+
       write(*, *)' Pools that are necessary for this stage:', necepul
       nparpu = parpul
       overf = mod(necepul, nparpu)
