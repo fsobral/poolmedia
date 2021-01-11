@@ -1,0 +1,99 @@
+html {
+    height: 100%;
+}
+
+html body {
+    height: 100%;
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+.body-background {
+    background: #33434c;
+}
+
+.unifesp-blue {
+    color: #33434C;
+}
+
+.unifesp-grey {
+    color: #727D83;
+}
+
+.btn-confirm {
+    color: #F2F2F2;
+    background-color: #5D866C;
+    border-color: #5D866C;
+}
+
+.btn-confirm:hover, .btn-confirm:focus, .btn-confirm:active, .btn-confirm.active, .open>.dropdown-toggle.btn-confirm {
+    color: #F2F2F2;
+    background-color: #215A36;
+    border-color: #215A36;
+}
+
+.btn-confirm:disabled {
+    color: #33434C;
+    background-color: #C0C5C8;
+    border-color: #C0C5C8;
+}
+
+
+.navbar-customization {
+    height: 120px;
+    background-color: #295A36;
+}
+
+.wrapper-customization {
+    background: #295A36;
+    background: rgb(41,90,54);
+    background: linear-gradient(180deg, rgba(41,90,54,1) 0%, rgba(51,67,76,1) 100%, rgba(0,0,0,1) 100%);
+    height: calc(100% - 120px) !important;
+}
+
+@media only screen and (max-width: 768px) {
+    .header-text {
+        font-size: 32px;
+        color: #A3AEB6;
+    }
+    .container-customization {
+        max-width: 95%;
+    }
+    .margin-left-adjust {
+        margin-left: 0 !important;
+    }
+}
+
+@media only screen 
+and (min-width : 768px) {
+    .header-text {
+        font-size: 32px;
+        color: #A3AEB6;
+    }
+    .container-customization {
+        max-width: 80%;
+    }
+    .margin-left-adjust {
+        margin-left: 1.5rem !important;
+    }
+}
+
+input:valid {
+    color: #3C6650;
+}
+
+input:invalid {
+    color: #AD5D49;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #C0C5C8 !important;
+    opacity: 1;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #C0C5C8 !important;
+}
+  
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #C0C5C8 !important;
+}

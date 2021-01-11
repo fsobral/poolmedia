@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Sala Planejada - UNIFESP</title>
+
+  <!-- Icon -->
+  <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/8.5.0/build.css" integrity="sha512-oXqkIy/+iqrHrpoTwFkSLZJpNwoYn9e77QtCNzBi+Jb6uJgTtcdHVy0C+nEpeUfC3fxSbydPxLG+ndikNVvrdQ==" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/custom.css">
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-174547179-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-174547179-1');
+  </script>
+</head>
+
+<body class="body-background">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-customization">
+    <div class="container" style="display:flex; justify-content:space-around">
+      <p class="text-uppercase header-text">Sala Planejada</p>
+    </div>
+  </nav>
+  
+  <!-- Page Content -->
+  <div class="container-wrapper wrapper-customization">
+    <div class="container container-customization">
+      <div class="row justify-content-center mb-4">
+        <div class="col-lg-12">
+          <div class="card" style="background: #F2F2F2">
+            <div class="card-body">
+              <!-- <div id="firstPage">
+                <div class="row">
+                  <div class="col-sm-12 col-lg-5 mb-4">
+                    <div class="row">
+                      <div class="col-sm-12 col-lg-12">
+                        <h4 class="margin-left-adjust mt-2 unifesp-blue">
+                          Planejador de salas
+                          <a href="#" data-toggle="modal" data-target="#modalAbout" class="unifesp-blue">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle-fill ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                            </svg>
+                          </a>
+                        </h4>
+                      </div>
+                      <div class="col-sm-12 col-lg-12">
+                        <p class="margin-left-adjust mt-4 text-justify unifesp-blue">A volta às aulas presenciais, mesmo que parcialmente, começam a ser planejadas por governos municipais, estaduais e reitores de universidades. Dentre as medidas que serão adotadas para minimizar o risco de contágio dos alunos e professores pelo coronavírus está o distanciamento entre as carteiras nas salas de aula. Através dessa aplicação, a partir de alguns parâmetros de entrada, é fornecida a disposição ótima para distribuição das carteiras na sala de aula especificada.</p>
+                        <p class="margin-left-adjust mt-2 text-justify unifesp-blue">Para sabermos o quanto a aplicação tem sido utilizada, solicitamos que sejam informados seu nome, instituição da qual faz parte e seu email.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-lg-7">
+                    <div class="row">
+                      <div class="col-sm-12 col-lg-12">
+                        <h4 class="margin-left-adjust mt-2 unifesp-blue">Informe seus dados</h4>
+                      </div>
+                      <div class="col-sm-12 col-lg-12">
+                        <form id="frmUsuario" class="margin-left-adjust">
+                          <div class="form-row mt-4">
+                            <div class="form-group col-sm-8">
+                              <label for="txtNome" class="unifesp-grey">Nome</label>
+                              <input id="txtNome" class="form-control" type="text" placeholder="Informe seu nome">
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-sm-8">
+                              <label for="txtInstituicao" class="unifesp-grey">Instituição</label>
+                              <input id="txtInstituicao" class="form-control" type="text" placeholder="Informe sua instituição">
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-sm-8">
+                              <label for="txtEmail" class="unifesp-grey">Email</label>
+                              <input id="txtEmail" class="form-control" type="email" placeholder="Informe seu email">
+                            </div>
+                          </div>
+                          <div class="row mt-4 mb-4">
+                            <div class="col-sm-12">
+                              <button id="btnUsuarioSubmit" class="btn btn-confirm" type="submit" disabled>Planejar</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="secondPage" style="display: none;"> -->
+              <div id="secondPage">
+                <section>
+                  <div class="row">
+                    <div class="col-sm-12 col-lg-5">
+                      <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                          <h4 class="margin-left-adjust mt-2">
+                            Instruções
+                          </h4>
+                        </div>
+                        <div class="col-sm-12 col-lg-12">
+                          <p class="margin-left-adjust mt-4 text-justify unifesp-blue">Preencha as dimensões da sala e da carteira seguindo o esquema abaixo. O espaço para o professor encontra-se sempre à direita (recomenda-se um espaço de 2 metros para o professor). As carteiras também estão sempre voltadas para a direita.</p>
+                        </div>
+                        <div class="col-sm-12 col-lg-12">
+                          <div class="row margin-left-adjust mt-4 mb-4" style="background: white;">
+                            <div class="col-sm-12 col-lg-9">
+                              <img class="rounded img-fluid" src="assets/img/sala.png" alt="Descrição da sala">
+                            </div>
+                            <div class="col-sm-12 col-lg-3 align-middle">
+                              <img class="rounded img-fluid" src="assets/img/carteira.png" alt="Descrição da carteira">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-6 mt-2 mb-2">
+                          <a id="sobre" href="#" data-toggle="modal" data-target="#modalAbout">
+                            <h4 class="margin-left-adjust mt-2">
+                              Sobre o projeto
+                            </h4>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-lg-7">
+                      <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                          <h4 class="margin-left-adjust mt-2 unifesp-blue">Planeje a distribuição dos alunos de acordo com sua sala</h4>
+                        </div>
+                        <div class="col-sm-12 col-lg-12">
+                          <form id="frmCalcular" class="margin-left-adjust">
+                            <div class="row mt-4">
+                              <div class="col-sm-6">
+                                <p class="unifesp-blue">Dimensões da sala</p>
+                                <div class="form-group ml-2">
+                                  <label for="txtLarguraSala" class="unifesp-grey">Largura da sala (m)</label>
+                                  <input id="txtLarguraSala" class="form-control" type="text" placeholder="5.25" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+                                </div>
+                                <div class="form-group ml-2">
+                                  <label for="txtComprimentoSala" class="unifesp-grey">Comprimento da sala (m)</label>
+                                  <input id="txtComprimentoSala" class="form-control" type="text" placeholder="7.05" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+                                </div>
+                              </div>
+                              <div class="col-sm-6">
+                                <p class="unifesp-blue">Dimensões das carteiras</p>
+                                <div class="form-group ml-2">
+                                  <label for="txtLarguraCarteira" class="unifesp-grey">Largura da carteira (m)</label>
+                                  <input id="txtLarguraCarteira" class="form-control" type="text" placeholder="0.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+                                </div>
+                                <div class="form-group ml-2">
+                                  <label for="txtComprimentoCarteira" class="unifesp-grey">Comprimento da carteira (m)</label>
+                                  <input id="txtComprimentoCarteira" class="form-control" type="text" placeholder="0.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row mt-4">
+                              <div class="col-sm-6">
+                                <div class="form-group">
+                                  <label for="selectModo" class="unifesp-blue">Você pode mover suas carteiras?
+                                    <a href="#" data-toggle="modal" data-target="#modalCanMove" class="unifesp-blue">
+                                      <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-info-circle-fill ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                                      </svg>
+                                    </a>
+                                  </label>
+                                  <select class="form-control" id="selectModo">
+                                    <option disabled selected="selected">Escolha uma opção</option>
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                  </select>
+                                </div>
+                                <div class="form-group">
+                                  <label for="txtDistanciaMinima" class="unifesp-blue">Distância mínima entre estudantes (m)</label>
+                                  <input id="txtDistanciaMinima" class="form-control" type="text" placeholder="1.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+                                </div>
+                              </div>
+                              <div class="col-sm-6">
+                                <div id="modoFixo" style="display: none;">
+                                  <div class="form-group">
+                                    <label for="txtQuantidadeFileiras" class="unifesp-grey">Quantidade de fileiras de carteiras</label>
+                                    <input id="txtQuantidadeFileiras" class="form-control" type="text" placeholder="7" pattern="[0-9]*" title="Inserir números inteiros">
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="txtQuantidadeCarteirasFileira" class="unifesp-grey">Número de carteiras por fileira</label>
+                                    <input id="txtQuantidadeCarteirasFileira" class="form-control" type="text" placeholder="5" pattern="[0-9]*" title="Inserir números inteiros">
+                                  </div>
+                                </div>
+                                <div id="modoLivre" style="display: none;">
+                                  <div class="form-group">
+                                    <label class="unifesp-grey">Quantidade de carteiras</label>
+                                    <div class="row">
+                                      <div class="col-sm-12 col-md-12 col-lg-8">
+                                        <div class="input-group">
+                                          <div class="input-group-prepend">
+                                            <div class="input-group-text">       
+                                              <input id="radioInserir" name="radio-options" class="radio-carteiras" type="radio" aria-label="Radio button para o seguido input" value="1">
+                                            </div>
+                                          </div>
+                                          <input id="txtQuantidadeCarteirasRadio" type="text" class="form-control" aria-label="Radio button com input" placeholder="15" pattern="[0-9]*" title="Inserir números inteiros" >
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                      <div class="col-sm-12 col-md-12 col-lg-8">
+                                        <div class="input-group">
+                                          <div class="input-group-prepend">
+                                            <div class="input-group-text">       
+                                              <input id="radioMaxima" name="radio-options" class="radio-carteiras" type="radio" aria-label="Radio button para o seguido input" value="2">
+                                            </div>
+                                          </div>
+                                          <input type="text" class="form-control" aria-label="Radio button com input" value="Máxima" disabled>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="row mt-1">
+                                      <div class="col-sm-12 col-md-12 col-lg-8">
+                                        <div class="form-check">
+                                          <label class="form-check-label unifesp-grey">
+                                            <input id="checkDesejaFileiras" type="checkbox" class="form-check-input" value=""> Solução em fileiras
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row mt-4 mb-4">
+                              <div class="col-sm-12">
+                                <button id="btnCalcularSubmit" class="btn btn-confirm" type="submit" disabled>Calcular</button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <hr id="sectionSeparator" class="mt-4" style="display: none;">
+                <section id="sectionResults" style="display: none;" class="mt-4">
+                  <div id="result" class="row"></div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalAbout" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="aboutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Sobre o projeto</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <p>
+              No contexto da COVID-19 a volta às aulas presenciais está sendo
+              planejada por gestores educacionais. Dentre as medidas que serão
+              adotadas para minimizar o risco de contágio dos alunos e
+              professores pelo coronavírus está o distanciamento entre as
+              carteiras nas salas de aula. Nossa contribuição consiste no
+              desenvolvimento de um aplicativo web de livre acesso para
+              auxiliar este planejamento.
+            </p>
+            <p>
+              Na nossa ferramenta, o gestor define a dimensão de sua sala, o
+              layout por fileiras ou não e a distância mínima entre os
+              estudantes ou a quantidade de estudantes na sala. A partir
+              destes parâmetros, o aplicativo fornece a disposição ótima:
+              maior número de alunos na sala ou o maior distanciamento
+              possível entre os estudantes.
+            </p>
+            <p>
+              Para cada solução encontrada no aplicativo, a atenção volta-se
+              para a transposição do resultado obtido computacionalmente para
+              a realidade da sala de aula. Dessa forma, o aplicativo produz
+              uma lista de instruções de como realizar a disposição ótima das
+              carteiras no caso em que for possível realizar a movimentação e
+              um mapa de lotação nos casos em que não há opção de alterar a
+              disposição em fileiras.
+            </p>
+            <p>
+              É interessante ressaltar que, embora nosso foco seja voltado
+              para o planejamento de salas de aulas, os recursos desenvolvidos
+              podem ser utilizados em vários outros contextos. Por exemplo, a
+              disposição de assentos em anfiteatros e estádios, mesas em
+              restaurantes, cadeiras em salas de espera de hospitais, entre
+              outros.
+            </p>
+            <p>
+              Por fim, ressaltamos que esta ferramenta não resolve outros
+              problemas inerentes ao fluxo da volta às aulas, que constituem
+              variáveis igualmente fundamentais para garantir a segurança de
+              todos. Portanto, não pode ser utilizada isoladamente como
+              estratégia para o retorno às atividades acadêmicas, sendo
+              necessário um planejamento adequado do contexto mais geral.
+            </p>
+            <hr class="mt-4">
+            <h3 class="mb-4">Integrantes</h3>
+            <table class="table table-bordered mt-4">
+              <thead class="thead-light">
+                <tr> <th>Universidade Federal de São Paulo</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>BUENO, Luís Felipe**</td></tr>
+                <tr><td>BUTKERAITES, Renan Brito</td></tr>
+                <tr><td>CHAVES, Antônio Augusto*</td> </tr>
+                <tr><td>COLLAÇO, Gustavo</td> </tr>
+                <tr><td>MAGUETA, Marcos</td> </tr>
+                <tr><td>SALLES NETO, Luiz Leduino*</td> </tr>
+                <tr><td>SILVA, Tiago S.</td></tr>
+                <tr><td>PELOGIA, Frederico J. R.</td></tr>
+                <tr><td>YANASSE, Horacio H.*</td></tr>
+              </tbody>
+              <thead class="thead-light">
+                <tr><th>Instituto Federal de Educação, Ciência e Tecnologia de São Paulo</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>BORTOLETE, J. C.</td></tr>
+                <tr><td>SANTOS, Thiago S.</td></tr>
+              </tbody>
+              <thead class="thead-light">
+                <tr><th>Universidade Estadual de Maringá</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>SOBRAL, Francisco N. C.</td></tr>
+              </tbody>
+            </table>
+            <p>
+              * Participantes do projeto temático da FAPESP, "Problemas de
+              corte, empacotamento, dimensionamento de lotes, programação da
+              produção, roteamento e localização e suas integrações em
+              contextos industriais e logísticos", processo número
+              2016/01860-1.
+            </p>
+            <p>
+              ** Participante do projeto temático da FAPESP, "Métodos
+              Computacionais de Otimização", processo número 2018/24293-0 e
+              do PRONEX-Otimização, financiado pela FAPERJ e CNPq.
+            </p>
+            <hr class="mt-4">
+            <h3 class="mb-4">Instituições</h3>
+            <div class="row mt-4 mb-4">
+              <div class="col-sm-12 col-md-4 col-lg-4">
+                <img src="assets/img/unifesp_logo_3.jpeg" width="100%" alt="Logo Unifesp">
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-1"></div>
+              <div class="col-sm-12 col-md-4 col-lg-3">
+                <img src="assets/img/ifsp.jpeg" width="75%" alt="Logo IFSP">
+              </div>
+              <div class="col-sm-12 col-md-4 col-lg-4">
+                <img src="assets/img/uem.png" width="100%" alt="Logo UEM">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalCanMove" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="canMoveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">O que isso quer dizer?</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <p>Escolha a opção <b>não</b> caso a sala tenha cadeiras
+            fixas em fileiras, não sendo possível configurá-las de uma
+            forma livre. Dessa maneira, a aplicação irá indicar a
+            distribuição dos estudantes pela sala. Caso elas sejam
+            móveis, selecione a opção <b>sim</b>, e serão indicadas
+            possíveis distribuições de carteiras para acomodar os
+            estudantes, respeitando sempre a distância mínima
+            fornecida (recomenda-se que seja de ao menos 1 metro e
+            meio).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js" integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd" crossorigin="anonymous"></script>
+  <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+  
+  <!-- Custom -->
+  <script src="js/script.js"></script>
+  <div id="mapHiddenPlacement"></id>
+</body>
+
+</html>
