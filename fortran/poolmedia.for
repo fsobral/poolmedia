@@ -1,6 +1,7 @@
 c  programa poolmedia.for. Basado en submultiplos.for
 c  Minimizar el costo considerando un intervalo de incerteza
 c  en la probabilidad.
+c  Actualizado en 5 enero 2021.
 
       implicit none
 
@@ -19,12 +20,13 @@ c  en la probabilidad.
       double precision cosmeri(100), cant1, cant2, infe1, probanf
       double precision prind, cangru, totinfec, intes, sumtes, nbomax 
       integer necepul, nparpu, nsteps, ntime, overf, nsumt,kmax1,nbon
-      integer pseudo
+      integer pseudo, filused
       integer longmer(100)
 
       double precision pmin, pmax
 
       diez = 10
+      filused = 0
 
 
 
@@ -185,9 +187,10 @@ c      write(*, *)' matriz(k, j-1)=', matriz(k, j-1)
       call submultiplos(matriz(k, j-1), submu, numesub)
 c      write(*, *)' Submultiplos de ', matriz(k, j-1),' hay ', numesub
       do kk = 1, numesub
+      filused = max0(filused, ini+kk)
       if(ini+kk.gt.mafil) then
       write(*, *)' Aumentar numero de filas mafil para mas de ', ini+kk
-      write(25, *)' Falto memoria cuando m1 = ', numero
+      write(*, *)' Falto memoria cuando m1 = ', numero
       memfail = memfail + 1
       numefail = numero
       go to 4
@@ -265,10 +268,10 @@ c  Encontrar el menor costo
       endif
       end do
 
-      write(*, *)' Resultado para p=:', p, ' m1 =', numero  
+      write(*, *)' Resultado para  m1 =', numero  
       write(27, *) numero, cosmenor
 
-      write(*, *)' Costo para estos valores de p y m1:', cosmenor
+      write(*, *)' Costo para este  m1:', cosmenor
 
       i = imenor
       do j = jmenor, 1, -1
@@ -276,7 +279,7 @@ c  Encontrar el menor costo
       i = prede(i, j)
       end do  
 
-      write(*, *)' Solucion para p=:', p, ' m1 =', numero
+      write(*, *)' Solucion para  m1 =', numero
 
       do i = 1, jmenor
       write(*, *) solucion(i)
@@ -287,7 +290,7 @@ c  Encontrar el menor costo
       end do
       write(*, *)
 
-      write(29, *)' Solucion para p=:', p, ' m1 =', numero
+      write(29, *)' Solucion para  m1 =', numero
       do i = 1, jmenor
       write(29, *) solucion(i)
       end do
@@ -344,6 +347,9 @@ c   O sea, aqui termina el proceso de optimizacion, arrojando la solucion solopt
       do i = 1, jopt
       write(*, *) solopt(i)
       end do
+
+      write(*, *)' Number of rows used:', filused,' over a maximum of '
+     *,  mafil
 
       write(29, *)
       write(29, *)' Fallas por falta de memoria:',  memfail 
