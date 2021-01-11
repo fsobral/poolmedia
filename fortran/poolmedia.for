@@ -1,29 +1,55 @@
-c     Programa submultiplos.for
-
+c  programa poolmedia.for. Basado en submultiplos.for
+c  Minimizar el costo considerando un intervalo de incerteza
+c  en la probabilidad.
 
       implicit none
 
       integer numero, lin, col, i, j, k, ii, ini, kk, jopt, u,
-     *  m1min, m1max, kkk
+     *  m1min, m1max, kkk, jj, diez
       integer mafil, macol, subdim, imenor, jmenor
       parameter (mafil=8500000, macol=20, subdim=100)
       integer solucion(macol), solopt(macol)
       integer matriz(mafil, macol), submu(subdim), numesub, filas
       integer columnas, noceros, numefail
       integer prede(mafil, macol)
-      double precision costos(mafil, macol), cosopt, pobla
+      double precision costos(mafil, macol), cosopt, pobla, acum
       double precision  p, q, cosmenor, cota, seed, probinf, parpul
       integer memfail, step, time, mejores, npobla, nparpul
       integer meritos(100, 20)
       double precision cosmeri(100), cant1, cant2, infe1, probanf
       double precision prind, cangru, totinfec, intes, sumtes 
-      integer necepul, nparpu, nsteps, ntime, overf, nsumt
+      integer necepul, nparpu, nsteps, ntime, overf, nsumt,kmax1
  
       integer longmer(100)
 
+      double precision pmin, pmax
 
-      write(*, *)' p:'
-      read(*, *)p  
+      diez = 10
+
+
+
+      write(*, *)' pmin, pmax:'
+      read(*, *)pmin, pmax
+      if(pmin.gt.pmax) then
+
+      write(*, *)' pmin no puede ser mayor que pmax'
+      stop
+      endif
+      if(pmin.eq.pmax) then
+      diez = 0
+      p = pmin
+      q = 1.d0-p
+      endif
+ 
+
+
+      if(pmax.gt.0.3066387) then
+      write(*, *)' If you believe that the probability '
+      write(*, *)' of infection may be bigger than 0.3066387'
+      write(*, *)' the  optimal solution is to test '
+      write(*, *)' all the individuals immediately.'
+      stop
+      endif  
 
       write(*, *)' Poblacion total:'
       read(*, *) pobla
@@ -50,28 +76,22 @@ c  Inicializar matriz de méritos
       
 
 
-c      seed = 282827213.
 
 5      write(*, *)
 
-c      write(*, *)' Comienzo de un nuevo test aleatorio' 
 
-c      call rando(seed, p)
-c      p = 0.3*p
+      write(*, *)' pmin, pmax = ', pmin, pmax
 
-      write(*, *)' p = ', p
 
-       q = 1.d0 - p
 
 c      cota = (dlog(3.d0)/3.d0)/dabs(dlog(q))
 
 c      write(*, *)' Cota para m2 = ', cota
 
-      cota =   1.464d0/dabs(dlog(q))          
 
-      write(*, *)' Cota para m1 = ', 1.464d0/dabs(dlog(q)) 
+      write(*, *)' Cota para m1 = ', 1.464d0/dabs(dlog(1.d0-pmin)) 
 
-      write(*, *)' Conta para m2 = ', 0.366/dabs(dlog(q))
+      write(*, *)' Conta para m2 = ', 0.366/dabs(dlog(1.d0-pmin))
       
 
 
@@ -85,6 +105,9 @@ c      write(*, *)' Cota para m2 = ', cota
 
       write(*, *)' m1 maximo permitido:'
       read(*, *) m1max
+
+      write(*, *)' Maximum number of stages k+1:'
+      read(*, *) kmax1
 
 c      write(*, *)'m1min,  m1max = '
 c      read(*, *) m1min, m1max
@@ -109,7 +132,22 @@ c      read(*, *) m1min, m1max
       columnas = 0
  
       matriz(1, 1) = numero
-      costos(1, 1) = 1./float(numero) + 1. - q**numero
+
+      acum = 0.d0
+      if(pmin.eq.pmax) then
+      acum = 1.d0/float(numero) + 1. - q**numero  
+      else 
+
+      do jj = 1, diez+1
+      p = pmin + dfloat(jj-1)/dfloat(diez) *(pmax-pmin)
+      q = 1.d0 -  p
+      acum = acum + 1.d0/float(numero) + 1. - q**numero
+      end do
+      endif
+      costos(1, 1) = acum/dfloat(diez+1)
+
+
+
       do 1 j = 2, macol
 
 c   Verificar si la columna j-1 tenia no-ceros
@@ -139,8 +177,27 @@ c      write(*, *)' Submultiplos de ', matriz(k, j-1),' hay ', numesub
       filas = max0(filas, ini+kk)
       matriz(ini + kk, j) = submu(kk)
       prede(ini+kk, j) = k
-      costos(ini+kk, j) = costos(k, j-1) + q**matriz(k, j-1)-
+
+      acum = 0.d0
+      if(pmin.eq.pmax) then
+      acum =  q**matriz(k, j-1)-
+     *  q**matriz(ini+kk,j) + (1.-q**matriz(k, j-1))/matriz(ini+kk, j)  
+      else 
+
+      do jj = 1, diez+1
+      p = pmin + dfloat(jj-1)/dfloat(diez) *(pmax-pmin)
+      q = 1.d0 -  p
+      acum = acum +  q**matriz(k, j-1)-
      *  q**matriz(ini+kk,j) + (1.-q**matriz(k, j-1))/matriz(ini+kk, j) 
+      end do
+      endif
+
+      costos(ini+kk, j) = costos(k, j-1) + acum/dfloat(diez+1)
+
+
+
+
+
       end do     
       ini = ini + numesub
 2     continue
@@ -178,20 +235,22 @@ c  Encontrar el menor costo
       imenor = 1
       jmenor = 1
       do j = 1, columnas
+      if(j.le.kmax1-1) then
       do i = 1, filas
       if(matriz(i, j).ne.0.and.costos(i, j).lt.cosmenor) then
       cosmenor = costos(i, j)
       imenor = i
       jmenor = j
+      
       endif
       end do
+      endif
       end do
 
       write(*, *)' Resultado para p=:', p, ' m1 =', numero  
       write(27, *) numero, cosmenor
 
       write(*, *)' Costo para estos valores de p y m1:', cosmenor
-c      write(*, *)' imenor, jmenor =', imenor, jmenor 
 
       i = imenor
       do j = jmenor, 1, -1
@@ -255,16 +314,32 @@ c  Poner la ultima solucion obtenida en su orden de mérito
  
 
 4     continue
+c   Este "4 continue" corresponde a "do 4 m1 = m1min, m1max"
+ 
 
 
       write(*, *)
-      write(*, *)' Solucion final para  p = ', p
+      write(*, *)' Solucion final: '
 
       write(*, *)' Longitud de la estrategia:', jopt     
 
       do i = 1, jopt
       write(*, *) solopt(i)
       end do
+
+      write(29, *)
+      write(29, *)' Fallas por falta de memoria:',  memfail 
+      write(29, *)' Solucion final para  p = ', p
+      write(29, *)' Longitud de la estrategia:', jopt     
+  
+
+  
+      do i = 1, jopt
+      write(29, *) solopt(i)
+      end do
+      write(29, *)' Costo optimo:', cosopt
+ 
+ 
 
 
 c        write(*, *)' 1/m1 + 1 - q^m1 = ',
@@ -274,7 +349,7 @@ c     *   1.d0/solopt (1) + 1.d0 - (1.d0-p)**solopt(1)
 
 
       write(*, *)' Optimal cost :', cosopt
-      write(*, *)' Failuress by lack of memory:', memfail
+      write(*, *)' Failures by lack of memory:', memfail
       
 c      write(*, *)' Limitante inferior: ', 1.d0/solopt(1)
 c
@@ -283,15 +358,25 @@ c
       write(*, *)'*************************************************'
       write(*, *)
       npobla = pobla
+      p = (pmin+pmax)/2.d0
+
       write(*, *)' Population :', npobla,' p = ', p
       nparpul = parpul
       write(*, *)' Parallel pools available:',nparpul  
       write(*, *)' Maximum pool-size allowed (m1):', m1max          
       write(*, *)'*************************************************'
-      write(*, *) ' Best ', mejores,' strategies for p = :', p
+      write(*, *) ' Best ', mejores,' strategies :' 
+      write(*, *)' (For simulating stages we use p =', p,' .)' 
+
       do i = 1, mejores
       write(*, *)'        ***************************************' 
       write(*, *)
+      if(meritos(i, 1).eq.0) then
+      write(*, *)' The number of feasible strategies is smaller than ',
+     *   mejores
+      stop
+      endif
+
       if(i.eq.1) write(*, *) ' 1-st best strategy'
       if(i.eq.2) write(*, *) ' 2-nd best strategy'  
       if(i.eq.3) write(*, *) ' 3-rd best strategy'  
@@ -334,10 +419,21 @@ c  cangru es el numero de grupos en el nivel 1
      *   necepul
       nparpu = parpul
       overf = mod(necepul, nparpu)
+      if(overf.eq.0) then
+      nsteps = (necepul-overf)/parpul
+      else
       nsteps = (necepul - overf)/parpul + 1
+      endif
       write(*, *)' Time units necessary to process this stage:', nsteps
+      if(overf.ne.0) then
+      if(overf.eq.1) then
       write(*, *)' including 1 time unit for an overflow equal to ', 
-     *  overf,' pools '
+     *  overf,' pool '
+      else
+      write(*, *)' including 1 time unit for an overflow equal to ', 
+     *  overf,' pools '       
+      endif
+      endif
       ntime = ntime + nsteps
       write(*, *)' Accumulated time up to this stage:', 
      *  ntime,' time units' 
@@ -403,10 +499,20 @@ c      write(*, *)' en el nivel ', j+1,' esté infectado:', prind
       write(*, *)' Pools that are necessary for this stage:', necepul
       nparpu = parpul
       overf = mod(necepul, nparpu)
+      if(overf.eq.0) then
+      nsteps = (necepul-overf)/parpul
+      write(*, *)' Time units necessary to process this stage:', nsteps      
+      else
       nsteps = (necepul - overf)/parpul + 1
       write(*, *)' Time units necessary to process this stage:', nsteps
+      if(overf.eq.1) then
       write(*, *)' including 1 time unit for an overflow equal to = ',
-     *   overf, ' pools'
+     *   overf, ' pool'
+      else
+      write(*, *)' including 1 time unit for an overflow equal to = ',
+     *   overf, ' pools'        
+      endif
+      endif
       ntime = ntime + nsteps
 
 c      write(*, *)' Number of (individual) tests at stage ',
@@ -435,18 +541,6 @@ c*******************************************************************************
       
 
   
-      write(29, *)
-      write(29, *)' Fallas por falta de memoria:',  memfail 
-      write(29, *)' Solucion final para  p = ', p
-      write(29, *)' Longitud de la estrategia:', jopt     
-  
-
-  
-      do i = 1, jopt
-      write(29, *) solopt(i)
-      end do
-      write(29, *)' Costo optimo:', cosopt
- 
 
       stop
       end
