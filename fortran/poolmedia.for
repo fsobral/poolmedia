@@ -17,7 +17,7 @@ c  en la probabilidad.
       integer memfail, step, time, mejores, npobla, nparpul
       integer meritos(100, 20), pobla, ncang
       double precision cosmeri(100), cant1, cant2, infe1, probanf
-      double precision prind, cangru, totinfec, intes, sumtes 
+      double precision prind, cangru, totinfec, intes, sumtes, nbomax 
       integer necepul, nparpu, nsteps, ntime, overf, nsumt,kmax1,nbon
       integer pseudo
       integer longmer(100)
@@ -45,19 +45,19 @@ c  en la probabilidad.
 
 
       if(pmax.gt.0.3066387) then
-      write(*, *)' If you believe that the probability '
-      write(*, *)' of infection may be bigger than 0.3066387'
-      write(*, *)' the  optimal solution is to test '
+      write(*, *)' It seems that you believe that the probability '
+      write(*, *)' of infection may be bigger than 0.3066387.'
+      write(*, *)' In that case, the  optimal solution is to test '
       write(*, *)' all the individuals immediately.'
       write(*, *)' The average cost is equal to 1 and we stop here.'
       stop
       endif  
 
-      write(*, *)' How many best strategies do you want to see ?'
+      write(*, *)' How many best strategies do you want to report ?'
       write(*, *)' (No more than 100 please)'
       read(*, *) mejores
       if(mejores.gt.100) then
-      write(*, *)' Sorry, we dont admit more than 100. We stop here'
+      write(*, *)' Sorry, we dont admit more than 100. We stop here.'
       stop
       endif                 
 
@@ -89,15 +89,23 @@ c      cota = (dlog(3.d0)/3.d0)/dabs(dlog(q))
 
 c      write(*, *)' Cota para m2 = ', cota
 
-      nbon =   1.464d0/dabs(dlog(1.d0-pmin)) + 1.d0  
+      nbomax =   1.464d0/dabs(dlog(1.d0-pmin)) + 1.d0  
  
+      nbon = nbomax
 
-      write(*, *)' Bound for m(1) = ', nbon 
+      if(nbon.gt.0) then
+      write(*, *)' Bound for optimal m(1) = ', nbon 
+      else
+      write(*, *)' Bound for optimal m(1) = ', nbomax
+      endif
 
-      nbon =    0.366/dabs(dlog(1.d0-pmin)) + 1.d0  
-  
-
-      write(*, *)' Bound for m(2) = ', nbon
+      nbomax =    0.366/dabs(dlog(1.d0-pmin)) + 1.d0  
+      nbon = nbomax
+      if(nbon.gt.0) then
+      write(*, *)' Bound for optimal m(2) = ', nbon
+      else
+      write(*, *)' Bound for optimal m(2) = ', nbomax
+      endif
 
      
  
@@ -110,10 +118,11 @@ c      write(*, *)' Cota para m2 = ', cota
       m1min = 2
 
       write(*, *)' Maximal allowed value for m(1) (first pool size):'
-      write(*, *)' Computer time depends on this number.'
-      write(*, *)' You can expect that time approx m1/1000 minutes'
-      write(*, *)' You can set m1 greater than "Bound for m1"'
-      write(*, *)' although it will be very likely unuseful'
+      write(*, *)' (Computer time depends on this number.'
+      write(*, *)' You can expect that time = m1/1000 minutes'
+      write(*, *)' You can set m1 greater than "Bound for optimal m(1)"'
+      write(*, *)' if you are interested in suboptimal.)'
+      write(*, *)' strategies.'
 
       read(*, *) m1max
 
@@ -358,7 +367,37 @@ c   O sea, aqui termina el proceso de optimizacion, arrojando la solucion solopt
       write(*, *)' Solution:'
       write(*, *)(solopt(i),i=1,jopt)
       write(*, *)' Optimal cost:', cosopt
+      write(*, *)' End of Optimization'
+      write(*, *)'*************************************************'
+
+      do i = 1, mejores
+      write(*, *)'*************************************************' 
+      write(*, *)
+      if(meritos(i, 1).eq.0) then
+      write(*, *)' The number of feasible strategies is smaller than ',
+     *   mejores
+      stop
+      endif
+
+
+      if(i.eq.1) write(*, *) '          1 -st best strategy'
+      if(i.eq.2) write(*, *) '          2 -nd best strategy'  
+      if(i.eq.3) write(*, *) '          3 -rd best strategy'  
+ 
+      if(i.gt.3)  write(*, *) i, '-th   best strategy ' 
+      write(*, *)' Number of stages (k+1):', longmer(i)+1
+      write(*, *)' Sequence  m1, m2, ..., mk, m_{k+1} :' 
+      write(*, *) (meritos(i,j),j=1,longmer(i)), '        1 '
+      write(*, *)' Cost of this sequence = ', cosmeri(i)
+      write(*, *)
       
+      end do
+
+ 
+
+
+      write(*, *)'*************************************************'
+ 
 
       write(*, *)' If you want pseudo-simulations considering '
       write(*, *)' parallel pools availability, type 1'
@@ -367,7 +406,8 @@ c   O sea, aqui termina el proceso de optimizacion, arrojando la solucion solopt
 
       write(*, *)'*************************************************'
 
-      if(pseudo.ne.0) then
+      if(pseudo.eq.0) stop
+
       write(*, *)' Total population:'
       read(*, *) pobla
 
@@ -384,15 +424,15 @@ c   O sea, aqui termina el proceso de optimizacion, arrojando la solucion solopt
       write(*, *)' Population :', pobla,' p = ', p
       nparpul = parpul
       write(*, *)' Parallel pools available:',nparpul  
-      endif
 
       write(*, *)' Maximum pool-size allowed (m1):', m1max          
       write(*, *)'*************************************************'
       write(*, *) ' Best ', mejores,' strategies :' 
 
-      if(pseudo.ne.0) then
       write(*, *)' (For simulating stages we use p =', p,' .)' 
-      endif
+      write(*, *)'  Pseudosimulations are not real simulations'
+      write(*, *)'  of the testing process. Take then as a rough'
+      write(*, *)'  indication of real possibilities.'
       
       do i = 1, mejores
       write(*, *)'        ***************************************' 
@@ -403,15 +443,13 @@ c   O sea, aqui termina el proceso de optimizacion, arrojando la solucion solopt
       stop
       endif
 
-      if(pseudo.ne.0) then
       write(*, *)' Pseudo-simulation of '
-      endif
 
-      if(i.eq.1) write(*, *) ' 1-st best strategy'
-      if(i.eq.2) write(*, *) ' 2-nd best strategy'  
-      if(i.eq.3) write(*, *) ' 3-rd best strategy'  
+      if(i.eq.1) write(*, *) '          1 -st best strategy'
+      if(i.eq.2) write(*, *) '          2 -nd best strategy'  
+      if(i.eq.3) write(*, *) '          3 -rd best strategy'  
  
-      if(i.gt.3)  write(*, *) i, '-th   Best strategy ' 
+      if(i.gt.3)  write(*, *) i, '-th   best strategy ' 
       write(*, *)' Number of stages (k+1):', longmer(i)+1
       write(*, *)' Sequence  m1, m2, ..., mk, m_{k+1} :' 
       write(*, *) (meritos(i,j),j=1,longmer(i)), '        1 '
@@ -427,7 +465,6 @@ c  prind es la probabilidad de que un individuo envuelto en los tests
 c  de determinado nivel j esté infectado
 c  En el nivel 1 es igual a p
 
-      if(pseudo.ne.0) then
       totinfec = p * pobla   
 
 c      write(*, *)' Total de infectados en la poblacion:', totinfec       
@@ -573,8 +610,6 @@ c     *,   step, ' Accumulated:', time
 
       write(*, *) 
 c*******************************************************************************
-      endif 
-c  This endif corresponds to if(pseudo.ne.0)
       end do
 
 
