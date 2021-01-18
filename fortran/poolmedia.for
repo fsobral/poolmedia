@@ -23,12 +23,18 @@ c  Actualizado en 6 enero 2021.
       integer pseudo, filused
       integer longmer(100)
 
+      character*200 file
+
       double precision pmin, pmax
 
       diez = 10
       filused = 0
 
-
+      write(*, *)' Name of the output file:'
+      read(*, *) file
+      open (20,file=file)
+      write(20, *) 'Test'
+      close(20)
 
       write(*, *)
      * ' Minimal and maximal probability of individual infection:'
