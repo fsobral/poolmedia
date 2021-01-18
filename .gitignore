@@ -4,6 +4,9 @@
 # Ignore configuration files
 *.ini
 
+# Ignore poolmedia executable file
+fortran/poolmedia
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
