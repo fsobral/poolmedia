@@ -22,7 +22,7 @@ def index():
     return render_template('form.html')
 
 @optimizer.route('/poolmedia', methods=['GET'])
-def optimizer_chairs():
+def call_fortran():
     import subprocess
 
     global __FORTRAN_EXEC_NAME, __FORTRAN_EXEC_PATH
@@ -43,7 +43,7 @@ def optimizer_chairs():
        maxm1size is None or \
        maxnstage is None:
 
-        return
+        return "Server error.", 500
 
     # Construct a random output file name
     from time import time
@@ -63,27 +63,32 @@ def optimizer_chairs():
             stdin=subprocess.PIPE, stdout=subprocess.PIPE
         )
 
-        output, error = process.communicate(('\n'.join(args)).encode('utf-8'))
+        # Convert to string and call Fortran
+        output, error = process.communicate(
+            '\n'.join(
+                (str(i) for i in args)
+            ).encode('utf-8'))
 
     except Exception as e:
 
         print(e)
 
         return '{0}()'.format(
-            request.args.get('callback'))
+            request.args.get('callback')), 500
 
     else:
 
         from os import remove
-        from json import loads
+        from json import loads, dumps
         
         loaded_json = loads(open(rand_file_name, 'r').read())
+        print(loaded_json)
 
         # Remove json file and finish process
-        remove(filename)
+        # remove(filename)
         process.terminate()
 
         return '{0}({1})'.format(
             request.args.get('callback'),
-            json.dumps(loaded_json)
+            dumps(loaded_json)
         )

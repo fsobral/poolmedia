@@ -9,19 +9,48 @@ function prepareResultsSection() {
 }
 
 function displaySolution(result) {
+
+  const nSols = result["solutions"].length
+  maxLen = 0
+  const solMatrix = []
+  for (i in result["solutions"]) {
+    const s = result["solutions"][i]
+    console.log(s)
+    maxLen = Math.max(maxLen, (s["sequence"]).length)
+    solMatrix.push(s["sequence"])
+  }
+  
   $("div#summary"). append(`
     <h2 class="margin-left-adjust">Results</h2>
-    <h4 class="mt-1 margin-left-adjust">Soluções encontradas: ${result["solutions"]}</h4>
-    <h4 class="mt-1 margin-left-adjust">Distância ideal calculada: ${myRound(result["min_distance"], 2)}</h4>
-    <h4 class="mt-1 margin-left-adjust">Número de carteiras: ${result["number_items"]}</h4>
+    <h4 class="mt-1 margin-left-adjust">Optimal cost: ${result["optimalCost"]}</h4>
+    <h4 class="mt-1 margin-left-adjust">Failures by lack of memory: ${result["memFailures"]}</h4>
+    <h4 class="mt-1 margin-left-adjust">Number of strategies: ${result["solutions"].length}</h4>
+    <h4 class="mt-1 margin-left-adjust">Strategies:</h4>
   `)
+
+  t = `<table class="table table-hover table-striped">
+       <thead> <tr>`
+
+  for (i=1; i<=maxLen; i++)
+    t += '<th> Stage ' + i + '</th>'
+  t += '</tr> </thead> <tbody>'
+  for (i=0; i<solMatrix.length; i++) {
+    t += '<tr>'
+    for (j=0; j<maxLen; j++) {
+      if (solMatrix[i][j]) t += '<td>' + solMatrix[i][j] + '</td>'
+    }
+    t += '</tr>'
+  }
+  t += '</table>'
+  $("div#summary").append(t)
+
 }
 
 function errorHandler() {
   $("#loading").remove()
   $("#result").append(`
     <div class="alert alert-danger alert-dismissible fade show margin-left-adjust">
-      Error! 
+      Server error! Please contact XXXX@XXX. 
       <button type="button" class="close" data-dismiss="alert">
         &times;
       </button>
@@ -75,11 +104,10 @@ $(document).ready(function() {
       success: function(result) {
         $("#loading").remove()
         
-        if(result["found_solution"]) displaySolution(result)
+        if(result["foundSolution"]) displaySolution(result)
         else $("div#summary").append(`
           <center><h1 class="mb-0">Results</h1>
-            We were unable to find a solution to the requested problem. If the problem is
-            too large, please contact XXXX@XXX.XX.
+            ${result["message"]}
           </center>
         `)
       },
