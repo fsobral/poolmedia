@@ -36,7 +36,7 @@ function displaySolution(result) {
   for (i=0; i<solutions.length; i++) {
     t += '<tr>'
     s = solutions[i]
-    for (j=0; j<s.nStages; j++) t += '<td>' + s["sequence"][i] + '</td>'
+    for (j=0; j<s.nStages; j++) t += '<td>' + s["sequence"][j] + '</td>'
     t += '<td>' + s["cost"] + '</tr>'
   }
   t += '</table>'
