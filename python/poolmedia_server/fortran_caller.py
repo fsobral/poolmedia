@@ -17,16 +17,18 @@ optimizer = Blueprint('mainapp', __name__)
 
 @optimizer.route('/')
 def index():
-    return "Index"
 
-@optimizer.route('/poolmedia', METHODS=['GET'])
+    from flask import render_template
+    return render_template('form.html')
+
+@optimizer.route('/poolmedia', methods=['GET'])
 def optimizer_chairs():
     import subprocess
 
     global __FORTRAN_EXEC_NAME, __FORTRAN_EXEC_PATH
 
     from flask import request
-    data = request.args
+    d = request.args
 
     minindinf = d.get('minindinf', type=float)
     maxindinf = d.get('maxindinf', type=float)
@@ -45,9 +47,9 @@ def optimizer_chairs():
 
     # Construct a random output file name
     from time import time
-    from haslib import sha256
+    from hashlib import sha256
     from random import random
-    rand_file_name = sha256(str(time() + random()).encode('latin')).hexdigest()
+    rand_file_name = sha256(str(time() + random()).encode('latin')).hexdigest() + '.tmp'
 
     # The last argument is to not perform simulation
     # TODO: check if it is necessary to keep such argument
@@ -67,8 +69,8 @@ def optimizer_chairs():
 
         print(e)
 
-        return '{0}({1})'.format(
-            request.args.get('callback'), {'response': 100, 'error': e})
+        return '{0}()'.format(
+            request.args.get('callback'))
 
     else:
 
@@ -81,10 +83,7 @@ def optimizer_chairs():
         remove(filename)
         process.terminate()
 
-        json_return = {'response': 200,
-                       'found_solution': loaded_json['found_solution']}
-
         return '{0}({1})'.format(
             request.args.get('callback'),
-            json.dumps(json_return)
+            json.dumps(loaded_json)
         )

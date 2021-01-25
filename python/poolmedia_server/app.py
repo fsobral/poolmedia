@@ -26,6 +26,6 @@ def create_app(ini_file):
 
 if __name__ == '__main__':
 
-    app = create_app("./cp_config.ini")
+    app = create_app("./pm_config.ini")
 
     app.run(host="0.0.0.0")
