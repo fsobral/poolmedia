@@ -33,16 +33,14 @@ c  Actualizado en 6 enero 2021.
       write(*, *)' Name of the output file:'
       read(*, *) file
       open (20,file=file)
-      write(20, *) 'Test'
-      close(20)
 
       write(*, *)
      * ' Minimal and maximal probability of individual infection:'
       read(*, *)pmin, pmax
       if(pmin.gt.pmax) then
-
-      write(*, *)' Sorry: Minimal cannot be bigger than maximum. '
-      stop
+         write(*, *)' Sorry: Minimal cannot be bigger than maximum. '
+         write(20, 9000) 'Minimal cannot be bigger than maximum.'
+         goto 7000
       endif
       if(pmin.eq.pmax) then
       diez = 0
@@ -53,20 +51,29 @@ c  Actualizado en 6 enero 2021.
 
 
       if(pmax.gt.0.3066387) then
-      write(*, *)' It seems that you believe that the probability '
-      write(*, *)' of infection may be bigger than 0.3066387.'
-      write(*, *)' In that case, the  optimal solution is to test '
-      write(*, *)' all the individuals immediately.'
-      write(*, *)' The average cost is equal to 1 and we stop here.'
-      stop
+         write(*, *)' It seems that you believe that the probability '
+         write(*, *)' of infection may be bigger than 0.3066387.'
+         write(*, *)' In that case, the  optimal solution is to test '
+         write(*, *)' all the individuals immediately.'
+         write(*, *)' The average cost is equal to 1 and we stop here.'
+
+         write(20,9000)
+     + ' It seems that you believe that the probability
+     +  of infection may be bigger than 0.3066387.
+     +  In that case, the  optimal solution is to test
+     +  all the individuals immediately.
+     +  The average cost is equal to 1 and we stop here.'
+         
+         goto 7000
       endif  
 
       write(*, *)' How many best strategies do you want to report ?'
       write(*, *)' (No more than 100 please)'
       read(*, *) mejores
       if(mejores.gt.100) then
-      write(*, *)' Sorry, we dont admit more than 100. We stop here.'
-      stop
+         write(*, *)' Sorry, we dont admit more than 100. We stop here.'
+         write(20, 9000) 'Sorry, we dont admit more than 100.'
+         goto 7000
       endif                 
 
  
@@ -614,11 +621,16 @@ c*******************************************************************************
       end do
 
 
-      
-
-  
-
+ 7000 close(20)
       stop
+
+C     JSON error format
+ 9000 FORMAT('{',/,
+     +     2X,'found_solution: false,',/,
+     +     2X,'message: "',A,'"',/,
+     +     '}')
+
+
       end
 
       subroutine submultiplos(numero, submu, numesub)
@@ -678,5 +690,3 @@ C     Transactions on Mathematical Software 5 (1979), 132-138.
       return
 
       end 
-             
- 
