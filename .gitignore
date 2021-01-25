@@ -6,6 +6,9 @@
 
 # Ignore poolmedia executable file
 fortran/poolmedia
+fortran/*.x
+
+*.tmp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
