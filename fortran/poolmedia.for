@@ -377,7 +377,9 @@ c8888888888888888888888888888888888888888888888888888888888888888888888888888888
       write(*, *)' Optimal cost:', cosopt
       write(*, *)' End of Optimization'
       write(*, *)'*************************************************'
-
+C     To file
+      write(20, 9001) cosopt,memfail
+      
       do i = 1, mejores
       write(*, *)'*************************************************' 
       write(*, *)
@@ -398,7 +400,14 @@ c8888888888888888888888888888888888888888888888888888888888888888888888888888888
       write(*, *) (meritos(i,j),j=1,longmer(i)), '        1 '
       write(*, *)' Cost of this sequence = ', cosmeri(i)
       write(*, *)
-      
+C     To file
+      write(20, 9002) longmer(i) + 1, cosmeri(i)
+      write(20, 9003) (meritos(i, j), j=1,longmer(i))
+      if ((i + 1 .gt. mejores) .or. (meritos(i + 1, 1) .eq. 0)) then
+         write(20, 9005)
+      else
+         write(20, 9004)
+      end if
       end do
 
  
@@ -626,10 +635,24 @@ c*******************************************************************************
 
 C     JSON error format
  9000 FORMAT('{',/,
-     +     2X,'found_solution: false,',/,
-     +     2X,'message: "',A,'"',/,
+     +     2X,'"found_solution": false,',/,
+     +     2X,'"message": "',A,'"',/,
      +     '}')
-
+ 9001 FORMAT('{',/,
+     +     2X,'"found_solution": true,',/,
+     +     2X,'"optimal_cost":',F17.10,',',/,
+     +     2X,'"mem_failures":',I5,',',/,
+     +     2X,'"solutions": [')
+ 9002 FORMAT(4X,'{',/,
+     +     6X,'"nStages":',I5,',',/,
+     +     6X,'"cost":',F17.10,',',/,
+     +     6X,'"sequence": [')
+ 9003 FORMAT(10(I5,','))
+ 9004 FORMAT('1]',/,4X,'},')
+ 9005 FORMAT('1]',/,
+     +     4X,'}',/,
+     +     2X,']',/,
+     +     '}')
 
       end
 
