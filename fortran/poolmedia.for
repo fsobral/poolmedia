@@ -635,13 +635,13 @@ c*******************************************************************************
 
 C     JSON error format
  9000 FORMAT('{',/,
-     +     2X,'"found_solution": false,',/,
+     +     2X,'"foundSolution": false,',/,
      +     2X,'"message": "',A,'"',/,
      +     '}')
  9001 FORMAT('{',/,
-     +     2X,'"found_solution": true,',/,
-     +     2X,'"optimal_cost":',F17.10,',',/,
-     +     2X,'"mem_failures":',I5,',',/,
+     +     2X,'"foundSolution": true,',/,
+     +     2X,'"optimalCost":',F17.10,',',/,
+     +     2X,'"memFailures":',I5,',',/,
      +     2X,'"solutions": [')
  9002 FORMAT(4X,'{',/,
      +     6X,'"nStages":',I5,',',/,
