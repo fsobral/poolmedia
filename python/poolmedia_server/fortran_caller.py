@@ -85,7 +85,7 @@ def call_fortran():
         print(loaded_json)
 
         # Remove json file and finish process
-        # remove(filename)
+        remove(filename)
         process.terminate()
 
         return '{0}({1})'.format(
