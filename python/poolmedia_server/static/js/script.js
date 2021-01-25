@@ -10,36 +10,34 @@ function prepareResultsSection() {
 
 function displaySolution(result) {
 
-  const nSols = result["solutions"].length
+  const solutions = result["solutions"]
+  const nSols = solutions.length
   maxLen = 0
-  const solMatrix = []
-  for (i in result["solutions"]) {
+
+  for (i in solutions) {
     const s = result["solutions"][i]
-    console.log(s)
     maxLen = Math.max(maxLen, (s["sequence"]).length)
-    solMatrix.push(s["sequence"])
   }
   
   $("div#summary"). append(`
     <h2 class="margin-left-adjust">Results</h2>
     <h4 class="mt-1 margin-left-adjust">Optimal cost: ${result["optimalCost"]}</h4>
     <h4 class="mt-1 margin-left-adjust">Failures by lack of memory: ${result["memFailures"]}</h4>
-    <h4 class="mt-1 margin-left-adjust">Number of strategies: ${result["solutions"].length}</h4>
+    <h4 class="mt-1 margin-left-adjust">Number of strategies: ${nSols}</h4>
     <h4 class="mt-1 margin-left-adjust">Strategies:</h4>
   `)
 
-  t = `<table class="table table-hover table-striped">
+  t = `<table class="ml-2 table table-hover table-striped">
        <thead> <tr>`
 
   for (i=1; i<=maxLen; i++)
     t += '<th> Stage ' + i + '</th>'
-  t += '</tr> </thead> <tbody>'
-  for (i=0; i<solMatrix.length; i++) {
+  t += '<th> Cost </th> </tr> </thead> <tbody>'
+  for (i=0; i<solutions.length; i++) {
     t += '<tr>'
-    for (j=0; j<maxLen; j++) {
-      if (solMatrix[i][j]) t += '<td>' + solMatrix[i][j] + '</td>'
-    }
-    t += '</tr>'
+    s = solutions[i]
+    for (j=0; j<s.nStages; j++) t += '<td>' + s["sequence"][i] + '</td>'
+    t += '<td>' + s["cost"] + '</tr>'
   }
   t += '</table>'
   $("div#summary").append(t)
