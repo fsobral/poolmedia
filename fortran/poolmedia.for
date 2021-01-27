@@ -1,7 +1,7 @@
 c  programa poolmedia.for. Basado en submultiplos.for
 c  Minimizar el costo considerando un intervalo de incerteza
 c  en la probabilidad.
-c  Actualizado en 6 enero 2021.
+c  Actualizado en 27 enero 2021.
 
       implicit none
 
@@ -13,14 +13,14 @@ c  Actualizado en 6 enero 2021.
       integer matriz(mafil, macol), submu(subdim), numesub, filas
       integer columnas, noceros, numefail
       integer prede(mafil, macol)
-      double precision costos(mafil, macol), cosopt, acum
+      double precision costos(mafil, macol), cosopt, acum, porce
       double precision  p, q, cosmenor, cota, seed, probinf, parpul
       integer memfail, step, time, mejores, npobla, nparpul
       integer meritos(100, 20), pobla, ncang
       double precision cosmeri(100), cant1, cant2, infe1, probanf
       double precision prind, cangru, totinfec, intes, sumtes, nbomax 
       integer necepul, nparpu, nsteps, ntime, overf, nsumt,kmax1,nbon
-      integer pseudo, filused
+      integer pseudo, filused, impre
       integer longmer(100)
 
       character*200 file
@@ -122,7 +122,7 @@ c      write(*, *)' Cota para m2 = ', cota
       write(*, *)' Bound for optimal m(2) = ', nbomax
       endif
 
-     
+    
  
 
 
@@ -136,26 +136,34 @@ c      write(*, *)' Cota para m2 = ', cota
       write(*, *)' (Computer time depends on this number.'
       write(*, *)' You can expect that time = m1/1000 minutes'
       write(*, *)' You can set m1 greater than "Bound for optimal m(1)"'
-      write(*, *)' if you are interested in suboptimal.)'
-      write(*, *)' strategies.'
+      write(*, *)' if you are interested in suboptimal strategies.)'
 
       read(*, *) m1max
 
       write(*, *)' Maximum number of stages k+1:'
       read(*, *) kmax1
 
+      write(*, *)' Type 1 if you want detailed printing'
+      write(*, *)' Otherwise, type 0'
+      read(*, *) impre
+
+ 
 
 
       do 4 numero = m1min, m1max   
+
+
 
 c888888888888888888888888888888888888888888888888888888888888888888888888888888888
 c     Impresiones (*, *) a partir de aqui y hasta el lugar indicado tienen importancia
 c     interna y son irrelevantes para el usuario
 c888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
+      if(impre.eq.1) then
       write(*, *)
       write(*, *)
      *  ' m1 = ', numero, ' m1 minimo:', m1min,' m1 maximo:', m1max       
+      endif
 
       do j = 1, macol
       do i = 1, mafil
@@ -243,8 +251,11 @@ c      write(*, *)' Submultiplos de ', matriz(k, j-1),' hay ', numesub
 
 3      columnas = j-1
 
+       if(impre.eq.1) then
       write(*, *)' Numero de filas necesarias para la matriz:', filas
       write(*, *)' Numero columnas necesarias para la matriz:', columnas
+      endif
+
 c      write(*, *)' Matriz de divisores:'
 c      write(*, *)'         Fila'
 c      do i = 1, filas 
@@ -284,9 +295,11 @@ c  Encontrar el menor costo
       endif
       end do
 
+      if(impre.eq.1) then
       write(*, *)' Resultado para  m1 =', numero  
 
       write(*, *)' Costo para este  m1:', cosmenor
+      endif
 
       i = imenor
       do j = jmenor, 1, -1
@@ -294,6 +307,7 @@ c  Encontrar el menor costo
       i = prede(i, j)
       end do  
 
+      if(impre.eq.1) then
       write(*, *)' Solucion para  m1 =', numero
 
       do i = 1, jmenor
@@ -304,6 +318,7 @@ c  Encontrar el menor costo
      *  solucion(i)/solucion(i+1)
       end do
       write(*, *)
+      endif
 
 
 
@@ -335,9 +350,11 @@ c  Poner la ultima solucion obtenida en su orden de mérito
       solopt(i) = solucion(i)
       end do
       endif
+
+      if(impre.eq.1) then
       write(*, *)' Costo minimo hasta ahora obtenido en m1 =', solopt(1)
       write(*, *)' con un costo igual a ', cosopt
- 
+      endif
 
 4     continue
 c   Este "4 continue" corresponde a "do 4 m1 = m1min, m1max"
@@ -345,7 +362,7 @@ c   O sea, aqui termina el proceso de optimizacion, arrojando la solucion solopt
 
 
 
-
+      if(impre.eq.1) then
 
       write(*, *)
       write(*, *)' Solucion final: '
@@ -356,15 +373,26 @@ c   O sea, aqui termina el proceso de optimizacion, arrojando la solucion solopt
       write(*, *) solopt(i)
       end do
 
+      endif
+
+
 
 c8888888888888888888888888888888888888888888888888888888888888888888888888888888888
 c    A partir de aqui las impresiones vuelven a tener importancia para el usuario
 c8888888888888888888888888888888888888888888888888888888888888888888888888888888888
  
 
-
+      write(*, *)
       write(*, *)' Number of rows used:', filused,' over a maximum of '
      *,  mafil
+
+      porce  = dfloat(filused)/dfloat(mafil)
+      porce = porce*100.
+      write(*, 101) porce 
+101   format(1x, ' Percentage Used / Reserved Memory:', f8.2)
+
+      write(*, *)
+
 
 
  
@@ -417,7 +445,7 @@ C     To file
  
 
       write(*, *)' If you want pseudo-simulations considering '
-      write(*, *)' parallel pools availability, type 1'
+      write(*, *)' availability of parallel pools, type 1'
       write(*, *)' otherwise, type 0'
       read(*, *) pseudo
 
