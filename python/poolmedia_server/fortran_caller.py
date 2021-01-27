@@ -53,7 +53,7 @@ def call_fortran():
 
     # The last argument is to not perform simulation
     # TODO: check if it is necessary to keep such argument
-    args = [rand_file_name, minindinf, maxindinf, numbstrat, maxm1size, maxnstage, 0]
+    args = [rand_file_name, minindinf, maxindinf, numbstrat, maxm1size, maxnstage, 0, 0]
     print(args)
 
     try:
