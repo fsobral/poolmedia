@@ -123,8 +123,7 @@ c      write(*, *)' Cota para m2 = ', cota
       write(*, *)' (Computer time depends on this number.'
       write(*, *)' You can expect that time = m1/1000 minutes'
       write(*, *)' You can set m1 greater than "Bound for optimal m(1)"'
-      write(*, *)' if you are interested in suboptimal.)'
-      write(*, *)' strategies.'
+      write(*, *)' if you are interested in suboptimal strategies.)'
 
       read(*, *) m1max
 
@@ -134,6 +133,8 @@ c      write(*, *)' Cota para m2 = ', cota
 
 
       do 4 numero = m1min, m1max   
+
+
 
 c888888888888888888888888888888888888888888888888888888888888888888888888888888888
 c     Impresiones (*, *) a partir de aqui y hasta el lugar indicado tienen importancia
@@ -342,6 +343,9 @@ c   O sea, aqui termina el proceso de optimizacion, arrojando la solucion solopt
       do i = 1, jopt
       write(*, *) solopt(i)
       end do
+
+      write(*, *)' Fraccion Memoria Usada dividido Memoria reservada:',
+     *   float(filused)/float(mafil)           
 
 
 c8888888888888888888888888888888888888888888888888888888888888888888888888888888888
