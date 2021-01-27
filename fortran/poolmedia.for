@@ -13,7 +13,7 @@ c  Actualizado en 6 enero 2021.
       integer matriz(mafil, macol), submu(subdim), numesub, filas
       integer columnas, noceros, numefail
       integer prede(mafil, macol)
-      double precision costos(mafil, macol), cosopt, acum
+      double precision costos(mafil, macol), cosopt, acum, porce
       double precision  p, q, cosmenor, cota, seed, probinf, parpul
       integer memfail, step, time, mejores, npobla, nparpul
       integer meritos(100, 20), pobla, ncang
@@ -344,8 +344,6 @@ c   O sea, aqui termina el proceso de optimizacion, arrojando la solucion solopt
       write(*, *) solopt(i)
       end do
 
-      write(*, *)' Fraccion Memoria Usada dividido Memoria reservada:',
-     *   float(filused)/float(mafil)           
 
 
 c8888888888888888888888888888888888888888888888888888888888888888888888888888888888
@@ -353,9 +351,17 @@ c    A partir de aqui las impresiones vuelven a tener importancia para el usuari
 c8888888888888888888888888888888888888888888888888888888888888888888888888888888888
  
 
-
+      write(*, *)
       write(*, *)' Number of rows used:', filused,' over a maximum of '
      *,  mafil
+
+      porce  = dfloat(filused)/dfloat(mafil)
+      porce = porce*100.
+      write(*, 101) porce 
+101   format(1x, ' Percentage Used / Reserved Memory:', f8.2)
+
+      write(*, *)
+
 
 
  
@@ -399,7 +405,7 @@ c8888888888888888888888888888888888888888888888888888888888888888888888888888888
  
 
       write(*, *)' If you want pseudo-simulations considering '
-      write(*, *)' parallel pools availability, type 1'
+      write(*, *)' availability of parallel pools, type 1'
       write(*, *)' otherwise, type 0'
       read(*, *) pseudo
 
