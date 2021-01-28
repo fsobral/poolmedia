@@ -20,7 +20,7 @@ c  Actualizado en 27 enero 2021.
       double precision cosmeri(100), cant1, cant2, infe1, probanf
       double precision prind, cangru, totinfec, intes, sumtes, nbomax 
       integer necepul, nparpu, nsteps, ntime, overf, nsumt,kmax1,nbon
-      integer pseudo, filused, impre
+      integer pseudo, filused, impre, nbonop
       integer longmer(100)
 
       double precision pmin, pmax
@@ -96,18 +96,22 @@ c      write(*, *)' Cota para m2 = ', cota
       nbon = nbomax
 
       if(nbon.gt.0) then
-      write(*, *)' Bound for optimal m(1) = ', nbon 
+      write(*, *)' Bound for optimal m(1) = ', nbon
+      nbonop = nbon 
       else
       write(*, *)' Bound for optimal m(1) = ', nbomax
+      nbonop = nbomax
       endif
 
-      nbomax =    0.366/dabs(dlog(1.d0-pmin)) + 1.d0  
-      nbon = nbomax
-      if(nbon.gt.0) then
-      write(*, *)' Bound for optimal m(2) = ', nbon
-      else
-      write(*, *)' Bound for optimal m(2) = ', nbomax
-      endif
+
+
+c      nbomax =    0.366/dabs(dlog(1.d0-pmin)) + 1.d0  
+c      nbon = nbomax
+c      if(nbon.gt.0) then
+c      write(*, *)' Bound for optimal m(2) = ', nbon
+c      else
+c      write(*, *)' Bound for optimal m(2) = ', nbomax
+c      endif
 
     
  
@@ -119,10 +123,14 @@ c      write(*, *)' Cota para m2 = ', cota
 
       m1min = 2
 
-      write(*, *)' Maximal allowed value for m(1) (first pool size):'
+      write(*, *)
+
+      write(*, *)' TYPE "Maximal allowed value for m(1) "'
+      write(*, *)' "(first pool size)":'
+      write(*, *)
       write(*, *)' (Computer time depends on this number.'
-      write(*, *)' You can expect that time = m1/1000 minutes'
-      write(*, *)' You can set m1 greater than "Bound for optimal m(1)"'
+      write(*, *)' You can expect that time = m(1)/1000 minutes'
+      write(*, *)' You can set m1 greater than ', nbonop 
       write(*, *)' if you are interested in suboptimal strategies.)'
 
       read(*, *) m1max
