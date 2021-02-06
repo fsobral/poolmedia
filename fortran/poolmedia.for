@@ -424,7 +424,7 @@ c8888888888888888888888888888888888888888888888888888888888888888888888888888888
       write(*, *)' End of Optimization'
       write(*, *)'*************************************************'
 C     To file
-      write(20, 9001) cosopt,memfail
+      write(20, 9001) cosopt,memfail,porce
       
       do i = 1, mejores
       write(*, *)'*************************************************' 
@@ -469,8 +469,15 @@ C     To file
 
       write(*, *)'*************************************************'
 
-      if(pseudo.eq.0) stop
+      if(pseudo.eq.0) then
+C     To file
+         write(20,9013)
+         goto 7000
+      endif
 
+C     To file
+      write(20,9014)
+      
       write(*, *)' Total population:'
       read(*, *) pobla
 
@@ -496,6 +503,9 @@ C     To file
       write(*, *)'  Pseudosimulations are not real simulations'
       write(*, *)'  of the testing process. Take then as a rough'
       write(*, *)'  indication of real possibilities.'
+
+C     Write to file
+      write(20, 9006)
       
       do i = 1, mejores
       write(*, *)'        ***************************************' 
@@ -544,7 +554,7 @@ c  cangru es el numero de grupos en el nivel 1
 
       write(*, *)
       write(*, *)' Stage ', j,' Size of each pool:', meritos(i,j)
-      
+
       ncang = cangru
       if(cangru.gt.dfloat(ncang)) then
       necepul = cangru + 1.
@@ -577,8 +587,10 @@ c  cangru es el numero de grupos en el nivel 1
       write(*, *)' Accumulated time up to this stage:', 
      *  ntime,' time units' 
 
-     
-                          
+C     To file
+      if (j .eq. 1) write(20,9007)
+      write(20,9008) meritos(i, j),necepul,nsteps,overf,ntime
+      write(20,9009)
 
       
 
@@ -671,10 +683,19 @@ c     *,   step, ' Accumulated:', time
  
  
 
-      write(*, *) 
+      write(*, *)
+
+C     To file
+      write(20,9008) 1,necepul,nsteps,overf,ntime
+      write(20,9010) nsumt,sumtes/pobla
+      if (i .lt. mejores) write(20,9011)
+      
 c*******************************************************************************
       end do
 
+C     To file
+      write(20,9012)
+      write(20,9013)
 
  7000 close(20)
       stop
@@ -688,6 +709,7 @@ C     JSON error format
      +     2X,'"foundSolution": true,',/,
      +     2X,'"optimalCost":',F17.10,',',/,
      +     2X,'"memFailures":',I5,',',/,
+     +     2X,'"percMemUsed":',F8.2,',',/,
      +     2X,'"solutions": [')
  9002 FORMAT(4X,'{',/,
      +     6X,'"nStages":',I5,',',/,
@@ -697,8 +719,19 @@ C     JSON error format
  9004 FORMAT('1]',/,4X,'},')
  9005 FORMAT('1]',/,
      +     4X,'}',/,
-     +     2X,']',/,
-     +     '}')
+     +     2X,']')
+ 9014 FORMAT(2X,',')
+ 9006 FORMAT(2X,'"simulations": [')
+ 9007 FORMAT(4X,'{',/,6X,'"s": [')
+ 9008 FORMAT(8X,'[',4(I10,','),I10,']')
+ 9009 FORMAT(8X,',')
+ 9010 FORMAT(6X,'],',/,
+     +     6X,'"totalNumTests":',I10,',',/,
+     +     6X,'"testsPerInhab":',F17.10,/,
+     +     4X,'}')
+ 9011 FORMAT(4X,',')
+ 9012 FORMAT(2X,']')
+ 9013 FORMAT('}')
 
       end
 
