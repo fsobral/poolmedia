@@ -1,14 +1,19 @@
 c  programa poolmedia.for. Basado en submultiplos.for
 c  Minimizar el costo considerando un intervalo de incerteza
 c  en la probabilidad.
-c  Actualizado en 27 enero 2021.
+c  Actualizado en 28 enero 2021.
 
       implicit none
 
       integer numero, lin, col, i, j, k, ii, ini, kk, jopt, u,
      *  m1min, m1max, kkk, jj, diez
       integer mafil, macol, subdim, imenor, jmenor
-      parameter (mafil=8500000, macol=20, subdim=100)
+      parameter (macol=20, subdim=100)
+
+      parameter (mafil=10000)
+c       parameter (mafil=8500000)
+c  pc-computer supports up to mafil = 8500000
+
       integer solucion(macol), solopt(macol)
       integer matriz(mafil, macol), submu(subdim), numesub, filas
       integer columnas, noceros, numefail
@@ -20,7 +25,7 @@ c  Actualizado en 27 enero 2021.
       double precision cosmeri(100), cant1, cant2, infe1, probanf
       double precision prind, cangru, totinfec, intes, sumtes, nbomax 
       integer necepul, nparpu, nsteps, ntime, overf, nsumt,kmax1,nbon
-      integer pseudo, filused, impre
+      integer pseudo, filused, impre, nbonop
       integer longmer(100)
 
       character*200 file
@@ -109,18 +114,22 @@ c      write(*, *)' Cota para m2 = ', cota
       nbon = nbomax
 
       if(nbon.gt.0) then
-      write(*, *)' Bound for optimal m(1) = ', nbon 
+      write(*, *)' Bound for optimal m(1) = ', nbon
+      nbonop = nbon 
       else
       write(*, *)' Bound for optimal m(1) = ', nbomax
+      nbonop = nbomax
       endif
 
-      nbomax =    0.366/dabs(dlog(1.d0-pmin)) + 1.d0  
-      nbon = nbomax
-      if(nbon.gt.0) then
-      write(*, *)' Bound for optimal m(2) = ', nbon
-      else
-      write(*, *)' Bound for optimal m(2) = ', nbomax
-      endif
+
+
+c      nbomax =    0.366/dabs(dlog(1.d0-pmin)) + 1.d0  
+c      nbon = nbomax
+c      if(nbon.gt.0) then
+c      write(*, *)' Bound for optimal m(2) = ', nbon
+c      else
+c      write(*, *)' Bound for optimal m(2) = ', nbomax
+c      endif
 
     
  
@@ -132,10 +141,12 @@ c      write(*, *)' Cota para m2 = ', cota
 
       m1min = 2
 
-      write(*, *)' Maximal allowed value for m(1) (first pool size):'
-      write(*, *)' (Computer time depends on this number.'
-      write(*, *)' You can expect that time = m1/1000 minutes'
-      write(*, *)' You can set m1 greater than "Bound for optimal m(1)"'
+      write(*, *)
+
+      write(*, *)' TYPE "Maximal allowed value for m(1) "'
+      write(*, *)' "(first pool size)":'
+      write(*, *)
+      write(*, *)' You can set m1 greater than ', nbonop 
       write(*, *)' if you are interested in suboptimal strategies.)'
 
       read(*, *) m1max
@@ -390,6 +401,13 @@ c8888888888888888888888888888888888888888888888888888888888888888888888888888888
       porce = porce*100.
       write(*, 101) porce 
 101   format(1x, ' Percentage Used / Reserved Memory:', f8.2)
+
+      if(memfail.gt.0) then
+      write(*, *)' Memory was not sufficient in ', memfail,' cases'
+      write(*, *)' Parameter mafil, which was ', mafil,' in this run'
+      write(*, *)' should be increased.'
+      write(*, *)' Contact the development team'
+      endif
 
       write(*, *)
 
