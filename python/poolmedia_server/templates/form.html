@@ -41,12 +41,25 @@
                         <input id="numbstrat" class="form-control" type="number" min="1" max="100" placeholder="3" title="Please, at most 100 strategies.">
                       </div>
                       <div class="form-group ml-2">
-                        <label for="maxm1size" class="unifesp-grey">Maximum size for first pool size</label>
-                        <input id="maxm1size" class="form-control" type="number" min="1" placeholder="4" pattern="[0-9]*\.?[0-9]*" title="You can expect that the time will be */1000 minutes.">
+                        <label for="maxm1size" class="unifesp-grey">Maximum size for first pool</label>
+                        <input id="maxm1size" class="form-control" type="number" min="1" placeholder="4" pattern="[0-9]+" title="You can expect that the time will be */1000 minutes.">
                       </div>
                       <div class="form-group ml-2">
                         <label for="maxnstage" class="unifesp-grey">Max. number of stages</label>
-                        <input id="maxnstage" class="form-control" type="number" min="1" placeholder="10" pattern="[0-9]*\.?[0-9]*" title="">
+                        <input id="maxnstage" class="form-control" type="number" min="1" placeholder="10" pattern="[0-9]+" title="">
+                      </div>
+                      <div class="form-group form-check ml-2">
+                        <label for="wantsimul" class="unifesp-grey">
+                          <input id="wantsimul" class="form-check-input" type="checkbox"> Do you want to perform simulations?
+                        </label>
+                      </div>
+                      <div class="form-group ml-2">
+                        <label for="populsize" class="unifesp-grey">Population size</label>
+                        <input id="populsize" class="form-control" type="number" min="1" placeholder="400000" pattern="[0-9]+" title="">
+                      </div>
+                      <div class="form-group ml-2">
+                        <label for="parapools" class="unifesp-grey">Parallel pools</label>
+                        <input id="parapools" class="form-control" type="number" min="1" placeholder="96" pattern="[0-9]+" title="">
                       </div>
                     </div>
                   </div>
