@@ -35,13 +35,21 @@ def call_fortran():
     numbstrat = d.get('numbstrat', type=int)
     maxm1size = d.get('maxm1size', type=int)
     maxnstage = d.get('maxnstage', type=int)
+    wantsimul = d.get('wantsimul', type=bool)
+    populsize = d.get('populsize', type=int)
+    parapools = d.get('parapools', type=int)
 
     # Check is some parameter is missing and return error if true
     if minindinf is None or \
        maxindinf is None or \
        numbstrat is None or \
        maxm1size is None or \
-       maxnstage is None:
+       maxnstage is None or \
+       wantsimul is None or \
+       ( wantsimul is True and (
+           populsize is None or \
+           parapools is None )
+       ):
 
         return "Server error.", 500
 
@@ -51,9 +59,13 @@ def call_fortran():
     from random import random
     rand_file_name = sha256(str(time() + random()).encode('latin')).hexdigest() + '.tmp'
 
-    # The last argument is to not perform simulation
-    # TODO: check if it is necessary to keep such argument
-    args = [rand_file_name, minindinf, maxindinf, numbstrat, maxm1size, maxnstage, 0, 0]
+    # Give any value if simulation is not wanted
+    if not wantsimul:
+        populsize = 0
+        parapools = 0
+        
+    args = [rand_file_name, minindinf, maxindinf, numbstrat, maxm1size, maxnstage, 0,
+            int(wantsimul), populsize, parapools]
     print(args)
 
     try:

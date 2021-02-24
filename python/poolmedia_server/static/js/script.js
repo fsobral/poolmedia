@@ -27,21 +27,73 @@ function displaySolution(result) {
     <h4 class="mt-1 margin-left-adjust">Strategies:</h4>
   `)
 
-  t = `<table class="ml-2 table table-hover table-striped">
+  hasSimulations = result["simulations"] ? true:false
+
+  // Add table with the number of best strategies found
+  
+  t = `<table class="ml-2 table table-hover">
        <thead> <tr>`
 
   for (i=1; i<=maxLen; i++)
     t += '<th> Stage ' + i + '</th>'
-  t += '<th> Cost </th> </tr> </thead> <tbody>'
+  t += '<th> Cost </th> <th></th> </tr> </thead> <tbody>'
   for (i=0; i<solutions.length; i++) {
     t += '<tr>'
     s = solutions[i]
     for (j=0; j<s.nStages; j++) t += '<td>' + s["sequence"][j] + '</td>'
-    t += '<td>' + s["cost"] + '</tr>'
+    t += '<td>' + s["cost"] + '</td> <td>'
+    
+    t += hasSimulations ? `<button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalSim${i}">Simulate!</button>`:''
+    t += '</td>'
   }
   t += '</table>'
+
   $("div#summary").append(t)
 
+
+  // Add modal elements with the results of the simulations
+  
+  if (hasSimulations) {
+    
+    const simulations = result["simulations"]
+
+    for (i=0; i<simulations.length; i++) {
+      t = `<div class="modal" id="modalSim${i}">
+             <div class="modal-dialog">
+               <div class="modal-content">
+                 <div class="modal-body">
+                   <p>
+                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                   </p>      
+                   <table class="ml-2 table table-hover">
+                   <thead> <tr>
+                     <th> Stage </th>
+                     <th> Pool size </th>
+                     <th> Pools necessary </th>
+                     <th> Time </th>
+                     <th> Overflow </th>
+                     <th> Total time </th>
+                   </tr> </thead>`
+
+      s = simulations[i]['s']
+
+      t += '<tbody>'
+      
+      for (j=0; j<s.length; j++) {
+        t += `<tr> <td> ${j+1} </td>`
+        for (k=0; k<5; k++) t += '<td>' + s[j][k] + '</td>'
+        t += '</tr>'
+      }
+
+      t += '</tbody>'
+      t += '</table>'
+      t += '</div></div></div></div>'
+
+      $("div#summary").append(t)
+      
+    }
+  }
+    
 }
 
 function errorHandler() {
@@ -58,12 +110,24 @@ function errorHandler() {
 
 $(document).ready(function() {
 
+  // Hide/show simulation form
+  if ($("#wantsimul").prop('checked')) $("#simulations").show()
+  $("#wantsimul").on("change", function() {
+    if (this.checked) $("#simulations").show()
+    else $("#simulations").hide()
+  })
+    
   function checkCalcularForm() {
     return  $('#minindinf').val() !== '' &&
-            $('#maxindinf').val() !== '' &&
-            $('#numbstrat').val() !== '' &&
-            $('#maxm1size').val() !== '' &&
-            $('#maxnstage').val() !== ''
+      $('#maxindinf').val() !== '' &&
+      $('#numbstrat').val() !== '' &&
+      $('#maxm1size').val() !== '' &&
+      $('#maxnstage').val() !== '' &&
+      ( !($('#wantsimul').prop('checked')) ||
+        ( $('#populsize').val() !== '' &&
+          $('#parapools').val() !== '' )
+      )
+      
   }
 
   function enableCalcularButton() {
@@ -71,7 +135,7 @@ $(document).ready(function() {
     else $('#btnCalcularSubmit').prop('disabled', true)
   }
 
-  $('#minindinf,#maxindinf,#numbstrat,#maxm1size,#maxnstage').keyup(function(e) {
+  $('#minindinf,#maxindinf,#numbstrat,#maxm1size,#maxnstage,#wantsimul,#populsize,#parapools').on("change blur",function(e) {
     enableCalcularButton()
   })
 
@@ -88,7 +152,10 @@ $(document).ready(function() {
       maxindinf: $("#maxindinf").val(),
       numbstrat: $("#numbstrat").val(),
       maxm1size: $("#maxm1size").val(),
-      maxnstage: $("#maxnstage").val()
+      maxnstage: $("#maxnstage").val(),
+      wantsimul: $("#wantsimul").prop('checked'),
+      populsize: $("#populsize").val(),
+      parapools: $("#parapools").val()
     }
 
     // Ajax call
