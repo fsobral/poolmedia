@@ -35,7 +35,7 @@ def call_fortran():
     numbstrat = d.get('numbstrat', type=int)
     maxm1size = d.get('maxm1size', type=int)
     maxnstage = d.get('maxnstage', type=int)
-    wantsimul = d.get('wantsimul', type=bool)
+    wantsimul = d.get('wantsimul', type=int)
     populsize = d.get('populsize', type=int)
     parapools = d.get('parapools', type=int)
 
@@ -46,12 +46,12 @@ def call_fortran():
        maxm1size is None or \
        maxnstage is None or \
        wantsimul is None or \
-       ( wantsimul is True and (
+       ( wantsimul is 1 and (
            populsize is None or \
            parapools is None )
        ):
 
-        return "Server error.", 500
+        return "Bad request.", 400
 
     # Construct a random output file name
     from time import time
@@ -59,13 +59,12 @@ def call_fortran():
     from random import random
     rand_file_name = sha256(str(time() + random()).encode('latin')).hexdigest() + '.tmp'
 
-    # Give any value if simulation is not wanted
-    if not wantsimul:
-        populsize = 0
-        parapools = 0
-        
     args = [rand_file_name, minindinf, maxindinf, numbstrat, maxm1size, maxnstage, 0,
-            int(wantsimul), populsize, parapools]
+            wantsimul]
+
+    if wantsimul is 1:
+        args += [populsize, parapools]
+        
     print(args)
 
     try:

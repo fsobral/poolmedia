@@ -153,7 +153,7 @@ $(document).ready(function() {
       numbstrat: $("#numbstrat").val(),
       maxm1size: $("#maxm1size").val(),
       maxnstage: $("#maxnstage").val(),
-      wantsimul: $("#wantsimul").prop('checked'),
+      wantsimul: ($("#wantsimul").prop('checked') ? 1:0),
       populsize: $("#populsize").val(),
       parapools: $("#parapools").val()
     }
