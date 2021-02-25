@@ -432,7 +432,7 @@ C     To file
       if(meritos(i, 1).eq.0) then
       write(*, *)' The number of feasible strategies is smaller than ',
      *   mejores
-      stop
+      exit
       endif
 
 
@@ -457,8 +457,6 @@ C     To file
       end do
 
  
-
-
       write(*, *)'*************************************************'
  
 
@@ -471,7 +469,6 @@ C     To file
 
       if(pseudo.eq.0) then
 C     To file
-         write(20,9013)
          goto 7000
       endif
 
@@ -513,7 +510,7 @@ C     Write to file
       if(meritos(i, 1).eq.0) then
       write(*, *)' The number of feasible strategies is smaller than ',
      *   mejores
-      stop
+      exit
       endif
 
       write(*, *)' Pseudo-simulation of '
@@ -688,16 +685,16 @@ c     *,   step, ' Accumulated:', time
 C     To file
       write(20,9008) 1,necepul,nsteps,overf,ntime
       write(20,9010) nsumt,sumtes/pobla
-      if (i .lt. mejores) write(20,9011)
-      
+      if (i .lt. mejores .and. meritos(i + 1, 1) .ne. 0) write(20,9011)
+
 c*******************************************************************************
       end do
 
 C     To file
       write(20,9012)
-      write(20,9013)
+ 7000 write(20,9013)
 
- 7000 close(20)
+      close(20)
       stop
 
 C     JSON error format
