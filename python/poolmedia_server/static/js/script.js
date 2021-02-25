@@ -41,10 +41,11 @@ function displaySolution(result) {
     t += '<tr>'
     s = solutions[i]
     for (j=0; j<s.nStages; j++) t += '<td>' + s["sequence"][j] + '</td>'
+    for (j=s.nStages; j<maxLen; j++) t += '<td></td>'
     t += '<td>' + s["cost"] + '</td> <td>'
     
     t += hasSimulations ? `<button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalSim${i}">Simulate!</button>`:''
-    t += '</td>'
+    t += '</td></tr>'
   }
   t += '</table>'
 
