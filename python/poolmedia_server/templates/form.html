@@ -19,67 +19,178 @@
 
   <body class="body-background">
 
-    <div id="secondPage">
-      <section>
+    <div class="display-1 unifesp-grey">Pool testing</div>
+    
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#whatIsPoolTesting">What is pool testing?</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-run" data-toggle="tab" href="#secondPage">Run!</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#about">About</a>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane container active" id="whatIsPoolTesting">
+        <br>
         <div class="row">
-          <div class="col-sm-12 col-lg-7">
-            <div class="row">
-              <div class="col-sm-12 col-lg-12">
-                <form id="frmCalcular" class="margin-left-adjust">
-                  <div class="row mt-4">
-                    <div class="col-sm-6">
-                      <div class="form-group ml-2">
-                        <label for="minindinf" class="unifesp-grey">Min. probability of individual infection</label>
-                        <input id="minindinf" class="form-control" type="text" placeholder="0.001" pattern="[0-9]*\.?[0-9]*" title="">
-                      </div>
-                      <div class="form-group ml-2">
-                        <label for="maxindinf" class="unifesp-grey">Max. probability of individual infection</label>
-                        <input id="maxindinf" class="form-control" type="text" placeholder="0.01" pattern="[0-9]*\.?[0-9]*" title="">
-                      </div>
-                      <div class="form-group ml-2">
-                        <label for="numbstrat" class="unifesp-grey">Number of best strategies</label>
-                        <input id="numbstrat" class="form-control" type="number" min="1" max="100" placeholder="3" title="Please, at most 100 strategies.">
-                      </div>
-                      <div class="form-group ml-2">
-                        <label for="maxm1size" class="unifesp-grey">Maximum size for first pool</label>
-                        <input id="maxm1size" class="form-control" type="number" min="1" placeholder="4" pattern="[0-9]+" title="You can expect that the time will be */1000 minutes.">
-                      </div>
-                      <div class="form-group ml-2">
-                        <label for="maxnstage" class="unifesp-grey">Max. number of stages</label>
-                        <input id="maxnstage" class="form-control" type="number" min="1" placeholder="10" pattern="[0-9]+" title="">
-                      </div>
-                      <div class="form-group form-check ml-2">
-                        <label for="wantsimul" class="unifesp-grey">
-                          <input id="wantsimul" class="form-check-input" type="checkbox"> I want to perform simulations!
-                        </label>
-                      </div>
-                      <div id="simulations" style="display: none;">
+          <div class="col-sm-12 col-lg-8">
+            <h3> What is pool testing?</h3>
+            <p>
+              The outbreak caused by the novel Coronavirus, SARS-CoV-2,
+              has spread over almost all countries in the world and
+              running diagnostic tests is required for the analysis
+              of symptomatic individuals.  Testing is also a powerful tool
+              used in surveillance at sites of previous or potential
+              outbreaks and for environmental monitoring.  The early
+              detection of asymptomatic or pre-symptomatic carriers is
+              crucial to mitigate the spread of the infection, since
+              contact tracing and isolation are required to interrupt the
+              chain of transmission. For this, massive testing campaigns
+              are being implemented, which demand the maximum efficiency
+              in the use of the available resources.  Mixing (pooling)
+              multiple samples to test them in a single reaction is an
+              option to increase testing capacity reducing costs and time
+              at the same time.
+            </p>
+            <p>
+              The first proposal of a pooling strategy for this aim
+              was made
+              by <a href="http://doi.org/10.1214/aoms/1177731363"
+              data-toggle="tooltip" title="Dorfman R. The Detection of
+              Defective Members of Large Populations.  Ann Math
+              Statist. 1943;14(4):436–440.">Dorfman</a> in 1943.  In
+              this strategy, pools are formed containing a number, m,
+              of individual samples. One test is run on each pool to
+              detect the presence of a defective or infected sample in
+              it.  Assuming that the detection is sensitive enough,
+              the samples in the pools that test negative in this
+              first stage are identified as non-infected.  All the
+              samples that belong to pools that test positive are
+              tested individually at a second stage.  The
+              identification of the samples that belong to pools that
+              test negative at first is done with only one test. The
+              identification of those that belong to pools that test
+              positive at first requires m+1 tests instead. A large
+              reduction in the number of tests will then be achieved
+              depending on the relative fraction of pools that test
+              positive at the first stage.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane container fade" id="about">
+        <br>
+        <h3>About this project</h3>
+        <ul>
+          <li> Inés Armendáriz
+            <p class="text-secondary">
+              Departamento de Matemática & IMAS, FCEN-UBA & CONICET,
+              Ciudad de Buenos Aires, Argentina
+            </p>
+          </li>
+          <li> Pablo A. Ferrari
+            <p class="text-secondary">
+              Departamento de Matemática & IMAS, FCEN-UBA & CONICET,
+              Ciudad de Buenos Aires, Argentina
+            </p>
+          </li>
+          <li> Daniel Fraiman
+            <p class="text-secondary">
+              Departamento de Matemática y Ciencias, Universidad de
+              San Andrés & CONICET, Victoria, Provincia de Buenos
+              Aires, Argentina
+            </p>
+          </li>
+          <li> José M. Martínez
+            <p class="text-secondary">
+              Department of Applied Mathematics, Institute of
+              Mathematics, Statistics, and Scientific Computing
+              (IMECC), University of Campinas, Campinas SP, Brazil
+            </p>
+          </li>
+          <li> Hugo G. Menzella
+            <p class="text-secondary">
+              Departamento de Tecnología & IPROByQ, FBIOyF-UNR & CONICET, Rosario, Provincia de Santa Fe, Argentina
+            </p>
+          </li>
+          <li> Silvina Ponce Dawson
+            <p class="text-secondary">
+              Departamento de Física & IFIBA, FCEN-UBA & CONICET, Ciudad de Buenos Aires, Argentina
+              <br>
+              <i>Corresponding author</i> - <span class="text-monospace">silvina at df dot uba dot ar</span>
+            </p>
+          </li>
+      </div>
+      
+      <div class="tab-pane container fade" id="secondPage">
+        <br>
+        <h3>Run and simulate</h3>
+        <section>
+          <div class="row">
+            <div class="col-sm-12 col-lg-9">
+              <div class="row">
+                <div class="col-sm-12 col-lg-12">
+                  <form id="frmCalcular" class="margin-left-adjust">
+                    <div class="row mt-4">
+                      <div class="col-sm-6">
                         <div class="form-group ml-2">
-                          <label for="populsize" class="unifesp-grey">Population size</label>
-                          <input id="populsize" class="form-control" type="number" min="1" placeholder="400000" pattern="[0-9]+" title="">
+                          <label for="minindinf" class="unifesp-grey">Min. probability of individual infection</label>
+                          <input id="minindinf" class="form-control" type="text" placeholder="0.001" pattern="[0-9]*\.?[0-9]*" title="">
                         </div>
                         <div class="form-group ml-2">
-                          <label for="parapools" class="unifesp-grey">Parallel pools</label>
-                          <input id="parapools" class="form-control" type="number" min="1" placeholder="96" pattern="[0-9]+" title="">
+                          <label for="maxindinf" class="unifesp-grey">Max. probability of individual infection</label>
+                          <input id="maxindinf" class="form-control" type="text" placeholder="0.01" pattern="[0-9]*\.?[0-9]*" title="">
+                        </div>
+                        <div class="form-group ml-2">
+                          <label for="numbstrat" class="unifesp-grey">Number of best strategies</label>
+                          <input id="numbstrat" class="form-control" type="number" min="1" max="100" placeholder="3" title="Please, at most 100 strategies.">
+                        </div>
+                        <div class="form-group ml-2">
+                          <label for="maxm1size" class="unifesp-grey">Maximum size for first pool</label>
+                          <input id="maxm1size" class="form-control" type="number" min="1" placeholder="4" pattern="[0-9]+" title="You can expect that the time will be */1000 minutes.">
+                        </div>
+                        <div class="form-group ml-2">
+                          <label for="maxnstage" class="unifesp-grey">Max. number of stages</label>
+                          <input id="maxnstage" class="form-control" type="number" min="1" placeholder="10" pattern="[0-9]+" title="">
+                        </div>
+                        <div class="form-group form-check ml-2">
+                          <label for="wantsimul" class="unifesp-grey">
+                            <input id="wantsimul" class="form-check-input" type="checkbox"> Perform simulations
+                          </label>
+                        </div>
+                        <div id="simulations" style="display: none;">
+                          <div class="form-group ml-2">
+                            <label for="populsize" class="unifesp-grey">Population size</label>
+                            <input id="populsize" class="form-control" type="number" min="1" placeholder="400000" pattern="[0-9]+" title="">
+                          </div>
+                          <div class="form-group ml-2">
+                            <label for="parapools" class="unifesp-grey">Parallel pools</label>
+                            <input id="parapools" class="form-control" type="number" min="1" placeholder="96" pattern="[0-9]+" title="">
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="row mt-4 mb-4">
-                    <div class="col-sm-12">
-                      <button id="btnCalcularSubmit" class="btn btn-confirm" type="submit" disabled>Calculate</button>
+                    <div class="row mt-4 mb-4">
+                      <div class="col-sm-12">
+                        <button id="btnCalcularSubmit" class="btn btn-confirm" type="submit" disabled>Calculate</button>
+                      </div>
                     </div>
-                  </div>
-                </form>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      <hr id="sectionSeparator" class="mt-4" style="display: none;">
-      <section id="sectionResults" style="display: none;" class="mt-4">
-        <div id="result" class="row"></div>
-      </section>
+        </section>
+        <hr id="sectionSeparator" class="mt-4" style="display: none;">
+        <section id="sectionResults" style="display: none;" class="mt-4">
+          <div id="result" class="row"></div>
+        </section>
+      </div>
     </div>
     
   <!-- Bootstrap core JavaScript -->

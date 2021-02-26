@@ -101,7 +101,7 @@ function errorHandler() {
   $("#loading").remove()
   $("#result").append(`
     <div class="alert alert-danger alert-dismissible fade show margin-left-adjust">
-      Server error! Please contact XXXX@XXX. 
+      Server error!<br> Please contact <span class="text-monospace">fncsobral+poolmedia at uem dot br</span>.
       <button type="button" class="close" data-dismiss="alert">
         &times;
       </button>
@@ -111,6 +111,9 @@ function errorHandler() {
 
 $(document).ready(function() {
 
+  // Activate tooltips
+  $('[data-toggle="tooltip"]').tooltip();
+    
   // Hide/show simulation form
   if ($("#wantsimul").prop('checked')) $("#simulations").show()
   $("#wantsimul").on("change", function() {

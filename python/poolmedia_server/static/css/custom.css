@@ -50,6 +50,14 @@ html body {
     height: calc(100% - 120px) !important;
 }
 
+.container {
+    margin-left:5px;
+}
+
+.nav-tabs .nav-run {
+    color: #dc3545;
+}
+
 @media only screen and (max-width: 768px) {
     .header-text {
         font-size: 32px;
@@ -99,7 +107,7 @@ input:invalid {
 }
 
 
-/* Loading funcitons */
+/* Loading functions */
 .loader {
   border: 16px solid #f3f3f3;
   border-radius: 50%;
