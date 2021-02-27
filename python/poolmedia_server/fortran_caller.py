@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, current_app
 
 
 __FORTRAN_EXEC_NAME = 'program.x'
@@ -51,6 +51,12 @@ def call_fortran():
            parapools is None )
        ):
 
+        current_app.logger.info('Bad request. Arguments\n\t minindinf {0:s}\n\t maxindinf {1:s}\n\t numbstrat {2:s}\n\t maxm1size {3:s}\n\t maxnstage {4:s}\n\t wantsimul {5:s}\n\t populsize {6:s}\n\t parapools {7:s}'.format(
+            *(str(i) for i in [minindinf, maxindinf, numbstrat,
+                               maxm1size, maxnstage, wantsimul,
+                               populsize, parapools])
+        ))
+        
         return "Bad request.", 400
 
     # Construct a random output file name
@@ -65,7 +71,7 @@ def call_fortran():
     if wantsimul is 1:
         args += [populsize, parapools]
         
-    print(args)
+    current_app.logger.debug(str(args))
 
     try:
 
@@ -80,9 +86,11 @@ def call_fortran():
                 (str(i) for i in args)
             ).encode('utf-8'))
 
+        current_app.logger.debug('Fortran output:\n{0:s}'.format(output))
+
     except Exception as e:
 
-        print(e)
+        current_app.logger.error('Error when running Fortran executable. Arguments {0:s}. Error {1:s}'.format(str(args), str(e)))
 
         return '{0}()'.format(
             request.args.get('callback')), 500
@@ -91,13 +99,35 @@ def call_fortran():
 
         from os import remove
         from json import loads, dumps
-        
-        loaded_json = loads(open(rand_file_name, 'r').read())
-        print(loaded_json)
 
-        # Remove json file and finish process
-        remove(rand_file_name)
+        # Finish Fortran process
         process.terminate()
+
+        try:
+        
+            loaded_json = loads(open(rand_file_name, 'r').read())
+
+            current_app.logger.debug(loaded_json)
+
+        except OSError as e:
+
+            current_app.logger.error('Unable to open file {0:s}. Error {1:s}'.format(rand_file_name, str(e)))
+
+        except Exception as e:
+
+            current_app.logger.error('Unable to parse JSON from file {0:s}. Error {1:s}'.format(rand_file_name, str(e)))
+
+            # Remove json file and finish process
+            remove(rand_file_name)
+
+        finally:
+
+            return 'Server error.', 500
+
+        # Remove json file
+        remove(rand_file_name)
+
+        current_app.logger.info('Successfully solved problem {0:s}'.format(str(args)))
 
         return '{0}({1})'.format(
             request.args.get('callback'),
