@@ -469,6 +469,7 @@ C     To file
 
       if(pseudo.eq.0) then
 C     To file
+         write(20,9013)
          goto 7000
       endif
 
@@ -692,9 +693,9 @@ c*******************************************************************************
 
 C     To file
       write(20,9012)
- 7000 write(20,9013)
+      write(20,9013)
 
-      close(20)
+ 7000 close(20)
       stop
 
 C     JSON error format
