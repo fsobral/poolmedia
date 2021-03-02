@@ -99,6 +99,7 @@ function displaySolution(result) {
 
 function errorHandler() {
   $("#loading").remove()
+  $("#result").empty()
   $("#result").append(`
     <div class="alert alert-danger alert-dismissible fade show margin-left-adjust">
       Server error!<br> Please contact <span class="text-monospace">fncsobral+poolmedia at uem dot br</span>.
