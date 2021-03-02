@@ -20,4 +20,15 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
+    data_files=[('fortran', 'poolmedia.for')],
 )
+
+from os import system
+
+try:
+
+    system('gfortran fortran/poolmedia.for -o fortran/poolmedia')
+
+except Exception as e:
+
+    raise Exception('Unable to compile the fortran program.')
