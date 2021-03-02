@@ -1,7 +1,7 @@
 import setuptools
 
 # Long description of the project
-with open("../README.md", "r", encoding="utf-8") as fh:
+with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
@@ -20,7 +20,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    data_files=[('fortran', 'poolmedia.for')],
+    data_files=[('fortran', ['fortran/poolmedia.for'])],
 )
 
 from os import system
