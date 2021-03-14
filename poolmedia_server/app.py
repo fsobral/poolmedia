@@ -29,7 +29,7 @@ def create_app(ini_file):
 
     __URL_PREFIX = config.get('Poolmedia', 'url.prefix', fallback='/')
 
-    from fortran_caller import optimizer, config_fortran_caller
+    from poolmedia_server.fortran_caller import optimizer, config_fortran_caller
     config_fortran_caller(config)
     app.register_blueprint(optimizer, url_prefix=__URL_PREFIX)
 
