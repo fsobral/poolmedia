@@ -79,7 +79,7 @@ def call_fortran():
 
         process = subprocess.Popen(
             [__FORTRAN_EXEC_PATH + '/' + __FORTRAN_EXEC_NAME],
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
 
         # Convert to string and call Fortran
@@ -88,7 +88,7 @@ def call_fortran():
                 (str(i) for i in args)
             ).encode('utf-8'))
 
-        current_app.logger.debug('Fortran output:\n{0:s}'.format(output))
+        current_app.logger.debug('Fortran output:\n{0:s}\nFortran error: \n{1:s}'.format(output.decode('utf-8'), error.decode('utf-8')))
 
     except Exception as e:
 
