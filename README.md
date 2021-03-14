@@ -15,8 +15,8 @@ documentation and is detailed below.
 
 ### `[Poolmedia]` section
 
-  . `url.prefix`: the prefix to load the API. By default is `/`
-  . `fortran.exec.name`: name of the Fortran executable. Default is `program.x`
-  . `fortran.exec.path`: full path to the Fortran executable. Default is `./`
-  . `logging.filename`: full path + base filename for the Rotating Log. Default is `./poolmedia.log`
-  . `logging.level`: level of the log. Default is `INFO`. Options (from least to most verbose): `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG`
+  - `url.prefix`: the prefix to load the API. By default is `/`
+  - `fortran.exec.name`: name of the Fortran executable. Default is `program.x`
+  - `fortran.exec.path`: full path to the Fortran executable. Default is `./`
+  - `logging.filename`: full path + base filename for the Rotating Log. Default is `./poolmedia.log`
+  - `logging.level`: level of the log. Default is `INFO`. Options (from least to most verbose): `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG`
