@@ -18,8 +18,10 @@ optimizer = Blueprint('mainapp', __name__)
 @optimizer.route('/')
 def index():
 
-    from flask import render_template
-    return render_template('form.html')
+    # from flask import render_template
+    # return render_template('form.html')
+
+    return 'OK', 200
 
 @optimizer.route('/poolmedia', methods=['GET'])
 def call_fortran():
