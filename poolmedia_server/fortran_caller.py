@@ -115,14 +115,14 @@ def call_fortran():
 
             current_app.logger.error('Unable to open file {0:s}. Error {1:s}'.format(rand_file_name, str(e)))
 
+            return 'Server error.', 500
+
         except Exception as e:
 
             current_app.logger.error('Unable to parse JSON from file {0:s}. Error {1:s}'.format(rand_file_name, str(e)))
 
             # Remove json file and finish process
             remove(rand_file_name)
-
-        finally:
 
             return 'Server error.', 500
 
