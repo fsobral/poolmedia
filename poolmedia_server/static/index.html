@@ -26,6 +26,9 @@
         <a class="nav-link active" data-toggle="tab" href="#whatIsPoolTesting">What is pool testing?</a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#howTo">How to run</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link nav-run" data-toggle="tab" href="#secondPage">Run!</a>
       </li>
       <li class="nav-item">
@@ -79,6 +82,66 @@
               depending on the relative fraction of pools that test
               positive at the first stage.
             </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane container" id="howTo">
+        <br>
+        <div class="row">
+          <div class="col-sm-12 col-lg-8">
+            <h3> How to run </h3>
+
+            <p>
+              The program takes 5 basic inputs
+              <ul>
+                <li> <span class="font-weight-bold">Minimum and
+                  maximum probability of individual infection</span>:
+                  gives rough estimates about the probability of a
+                  sample to be infected by Sars-Cov-2 </li>
+                
+                <li> <span class="font-weight-bold">Number of best
+                  strategies</span>: how many strategies, besides the
+                  optimal one, you are interested to receive </li>
+
+                <li> <span class="font-weight-bold">Maximum size of
+                  the first pool</span>: indicates how many individual
+                  samples are allowed to be mixed to form the first
+                  pool. This usually is related to the precision of
+                  the equipment and each country's laws </li>
+
+                <li> <span class="font-weight-bold">Maximum number of
+                  stages</span>: gives a limit to the maximum number
+                  of stages</li>
+              </ul>
+            </p>
+            <p>
+              As output, it gives test strategies in ascending order,
+              according to the optimal cost: from the best strategy
+              (lower cost) to the worse, up to the maximum number of
+              strategies.
+            </p>
+            <p>
+              If memory errors occur, then the solution might not be
+              optimal. If you really need to solve such instance,
+              please contact the authors or the site administrator.
+            </p>
+            
+            <h4>Simulations</h4>
+            <p>
+              The program also performs simulations. For generating
+              simulations, the user have to check the "Perform
+              simulations" checkbox and provide the following
+              information
+              <ul>
+                <li> <span class="font-weight-bold">Population
+                    size</span>: the population where the tests will
+                    be performed</li>
+                <li> <span class="font-weight-bold">Parallel
+                    pools</span>: how many parallel pools are possible
+                    to be tested. Usual PCR equipments allow up to 96
+                    pools to be testes at the same time</li>
+              </ul>
           </div>
         </div>
       </div>
