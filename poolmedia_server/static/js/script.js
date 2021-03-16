@@ -140,7 +140,7 @@ $(document).ready(function() {
     else $('#btnCalcularSubmit').prop('disabled', true)
   }
 
-  $('#minindinf,#maxindinf,#numbstrat,#maxm1size,#maxnstage,#wantsimul,#populsize,#parapools').on("change blur",function(e) {
+  $('#minindinf,#maxindinf,#numbstrat,#maxm1size,#maxnstage,#wantsimul,#populsize,#parapools').on("change blur keyup",function(e) {
     enableCalcularButton()
   })
 
