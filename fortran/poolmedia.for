@@ -1,8 +1,8 @@
 c  programa poolmedia.for. Basado en submultiplos.for
 c  Minimizar el costo considerando un intervalo de incerteza
 c  en la probabilidad.
-c  Actualizado en 28 enero 2021.
-
+c  Actualizado en 30 enero 2021.
+c
       implicit none
 
       integer numero, lin, col, i, j, k, ii, ini, kk, jopt, u,
@@ -11,7 +11,9 @@ c  Actualizado en 28 enero 2021.
       parameter (macol=20, subdim=100)
 
       parameter (mafil=10000)
+
 c       parameter (mafil=8500000)
+
 c  pc-computer supports up to mafil = 8500000
 
       integer solucion(macol), solopt(macol)
@@ -21,14 +23,14 @@ c  pc-computer supports up to mafil = 8500000
       double precision costos(mafil, macol), cosopt, acum, porce
       double precision  p, q, cosmenor, cota, seed, probinf, parpul
       integer memfail, step, time, mejores, npobla, nparpul
-      integer meritos(100, 20), pobla, ncang
+      integer meritos(100, 20), pobla, ncang, cangf, infef
       double precision cosmeri(100), cant1, cant2, infe1, probanf
       double precision prind, cangru, totinfec, intes, sumtes, nbomax 
       integer necepul, nparpu, nsteps, ntime, overf, nsumt,kmax1,nbon
       integer pseudo, filused, impre, nbonop
-      integer longmer(100)
+      integer longmer(100), ka
 
-      double precision pmin, pmax
+      double precision pmin, pmax, eme(100), costal
 
       diez = 10
       filused = 0
@@ -36,7 +38,10 @@ c  pc-computer supports up to mafil = 8500000
 
 
       write(*, *)
-     * ' Minimal and maximal probability of individual infection:'
+     * ' Minimal and maximal prevalence:'
+
+c prevalence: probability of individual infection:'
+
       read(*, *)pmin, pmax
       if(pmin.gt.pmax) then
 
@@ -211,8 +216,10 @@ c      write(*, *)' Submultiplos de ', matriz(k, j-1),' hay ', numesub
       do kk = 1, numesub
       filused = max0(filused, ini+kk)
       if(ini+kk.gt.mafil) then
+      if(impre.eq.1) then
       write(*, *)' Aumentar numero de filas mafil para mas de ', ini+kk
       write(*, *)' Falto memoria cuando m1 = ', numero
+      endif
       memfail = memfail + 1
       numefail = numero
       go to 4
@@ -390,10 +397,24 @@ c8888888888888888888888888888888888888888888888888888888888888888888888888888888
 101   format(1x, ' Percentage Used / Reserved Memory:', f8.2)
 
       if(memfail.gt.0) then
-      write(*, *)' Memory was not sufficient in ', memfail,' cases'
-      write(*, *)' Parameter mafil, which was ', mafil,' in this run'
-      write(*, *)' should be increased.'
-      write(*, *)' Contact the development team'
+
+      write(*, *)
+      write(*, *) ' *************************************************'
+      write(*, *) ' *************************************************'
+      write(*, *)
+
+
+      write(*, *)' MEMORY WAS NOT SUFFICIENT IN ', memfail,' CASES'
+      write(*, *)' PARAMETER MAFIL, WHICH WAS  ', mafil,' IN THIS RUN'
+      write(*, *)' SHOULD BE INCREASED.'
+      write(*, *)' YOU MAY CONTACT THE DEVELOPMENT TEAM.'
+
+      write(*, *)
+      write(*, *) ' *************************************************'
+      write(*, *) ' *************************************************'
+      write(*, *)
+ 
+
       endif
 
       write(*, *)
@@ -409,6 +430,28 @@ c8888888888888888888888888888888888888888888888888888888888888888888888888888888
       write(*, *)(solopt(i),i=1,jopt)
       write(*, *)' Optimal cost:', cosopt
       write(*, *)' End of Optimization'
+
+      p = (pmin+pmax)/2.d0
+
+
+      ka = longmer(1)
+      do j = 1, ka
+      eme(j) = dfloat(meritos(1, j))
+      end do
+      eme(ka+1) = 1.d0
+ 
+
+      write(*, *)
+      call poolindeptes(ka, eme, p, costal)    
+      write(*, *)' Reshuffled-pool cost:', costal
+      write(*, *)
+      write(*, *)' (The reshuffled-pool cost is the cost obtained if '
+      write(*, *)' the samples belonging to pools tested positive at '
+      write(*, *)' any given stage are shuffled before being '
+      write(*, *)' distributed in the pools of the next stage.)' 
+
+      write(*, *) 
+
       write(*, *)'*************************************************'
 
       do i = 1, mejores
@@ -572,11 +615,21 @@ c      write(*, *)' Probabilidad de que um grupo en  nivel ', j
 c      write(*, *)' (con ', meritos(i, j),' individuos', ' )'
 c      write(*, *)' esté infectado:', probinf
 
-
 c  Calcular la cantidad de grupos infectados en el nivel j 
       infe1 = probinf * cangru 
-c      write(*, *)' Cantidad de grupos infectados en el nivel', j,'=',
-c     *  infe1 
+
+      infef = floor(infe1)
+      if(infe1-dfloat(infef).gt.0.5d0) infef = infef+1
+
+      cangf = floor(cangru)
+      if(cangru - dfloat(cangf).gt.0.5d0) cangf = cangf+1 
+      
+
+
+c      write(*, *)'  Infected pools at stage ', j,' = ', infef
+
+       write(*, *)'  Non-infected pools at stage ', j,' = ', cangf-infef
+
    
 c  Calcular la cantidad de grupos en el nivel j+1
       cangru = infe1*meritos(i, j)
@@ -592,6 +645,7 @@ c      write(*, *)' Total individuos envueltos en tests en nivel',
 c     *   j+1,' = ',intes
 c  Calcular la probabilidad de que un individuo envuelto em tests en el 
 c  nivel j+1 este' infectado
+      
       prind = totinfec/intes
 
 c      prind = p
@@ -720,3 +774,42 @@ C     Transactions on Mathematical Software 5 (1979), 132-138.
       end 
              
  
+
+      subroutine poolindeptes(k, m, prob, total)
+
+      implicit none
+      double precision m(100)
+      double precision pob(0:100)
+      double precision pools(100)
+      double precision p(0:100)
+      double precision q(0:100)
+      double precision total, prob
+
+
+      integer k, j
+
+      p(0) = prob
+
+      total = 0.d0
+      pob(0) = 1.d0
+
+      q(0) = 1.d0-p(0)
+
+      j = 0
+
+1     pools(j+1) = pob(j)/m(j+1)
+      total = total + pools(j+1)
+      if(j+1.eq.k+1) return
+
+      pob(j+1)= pob(j)*(1.d0 - q(j)**m(j+1))
+      p(j+1) = p(j)/(1.d0-q(j)**m(j+1))
+      q(j+1) = 1.d0 - p(j+1)
+
+      j = j+1
+      go to 1
+
+      end
+      
+
+      
+
